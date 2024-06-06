@@ -6,11 +6,11 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/05 14:07:59 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/06 06:29:02 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/openmlx.h"
+#include "../includes/cub3d.h"
 /*
 void	buffertest(t_img *img, t_ui ui)
 {
@@ -41,10 +41,11 @@ void	buffertest(t_img *img, t_ui ui)
 	}
 }*/
 
+
 int move = 0;
 
 float px, py,pdx,pdy,pa;
-int mapx=9,mapy=9,maps=60;
+int mapx=9, mapy=9, maps=64;
 int map[] =
 {
 	1,1,1,1,1,1,1,1,1,
@@ -57,6 +58,7 @@ int map[] =
 	1,0,0,0,0,0,0,0,1,
 	1,1,1,1,1,1,1,1,1,
 };
+
 float degToRad(int a) { return a*PI/180.0;}
 int FixAng(int a){ if(a>359){ a-=360;} if(a<0){ a+=360;} return a;}
 
@@ -65,12 +67,15 @@ int FixAng(int a){ if(a>359){ a-=360;} if(a<0){ a+=360;} return a;}
 void drawrays3d(void)
 {
 	t_prim	p;
-	__uint32_t	vcv;
+	t_prim	g;
 
 	int r,mx,my,mp,dof; float vx,vy,rx,ry,ra,xo,yo,disV,disH; 
 	
+	g = ml_begin(ML_PRIM_POLYGON);
+	
+	ml_vertex(&g, (t_vec2){px,py});
 	ra=FixAng(pa+30);//ray set back 30 degrees
-	for(r=0;r<70;r++)
+	for(r=0;r<90;r++)
 	{
 	//---Vertical--- 
 	dof=0; disV=100000;
@@ -99,33 +104,29 @@ void drawrays3d(void)
 		mx=(int)(rx)>>6; my=(int)(ry)>>6; mp=my*mapx+mx;                          
 		if(mp>0 && mp<mapx*mapy && map[mp]==1){ dof=8; disH=cos(degToRad(ra))*(rx-px)-sin(degToRad(ra))*(ry-py);}//hit         
 		else{ rx+=xo; ry+=yo; dof+=1;}                                               //check next horizontal
-	} 
+	}
 	
-	p = ml_begin(ML_PRIM_LINES);
-	ml_color(&p, 0x00EE00);
-	vcv = 0x00EE00;
-	if(disV<disH){ rx=vx; ry=vy; disH=disV; ml_color(&p, 0x008000);vcv = 0x008000;}
-	ml_size(&p, 1);
-	ml_vertex(&p, (t_vec2){px,py});
-	ml_vertex(&p, (t_vec2){rx,ry});
-	ml_end(&p);
+	if(disV<disH){ rx=vx; ry=vy; disH=disV;}
+	ml_vertex(&g, (t_vec2){rx,ry});
 
 	int ca=FixAng(pa-ra); disH=disH*cos(degToRad(ca));                            //fix fisheye 
 	int lineH = (maps*320)/(disH); if(lineH>320){ lineH=320;}                     //line height and limit
 	int lineOff = 160 - (lineH>>1);           
 	                                    //line offset
-	if(disV<disH){ rx=vx; ry=vy; disH=disV; ml_color(&p, 0x0000FF);}
+	if(disV<disH){ rx=vx; ry=vy; disH=disV; }
 	ra=FixAng(ra-1); 
 
 
 	p = ml_begin(ML_PRIM_QUADS);
-	//ml_color(&p, 0xFF0000);
-	if (vcv == 0x008000)
+	if (r == 0x008000)
+	{
 		ml_settexture(&p, "/brick_argb.xpm");
+		ml_color(&p, 0x0000ff);
+		ml_setintensity(&p, 0.2);
+	}
 	else
 		ml_settexture(&p, "/ground.xpm");
 	//ml_size(&p, 8);
-	
 	ml_vertex(&p, (t_vec2){r*8+600, lineOff + lineH});
 	ml_vertex(&p, (t_vec2){r*8+600 + 8,lineOff + lineH});
 	ml_vertex(&p, (t_vec2){r*8+600 + 8, lineOff});
@@ -133,78 +134,82 @@ void drawrays3d(void)
 	ml_setmode(&p, 0);
 	ml_end(&p);                                                       //go to next ray
 	}
+	ml_color(&g, 0xFFFF00);
+	ml_setmode(&g, 1);
+	ml_size(&g, 2);
+	ml_end(&g);
 }
+
 
 void draw_map2d()
 {
+	t_prim	c;
 	int x,y,xo,yo;
 	for(y = 0; y < mapy;y++)
 	{
 		for(x = 0; x < mapx;x++)
 		{
-			xo = x * maps;
-			yo = y * maps;
-			if (map[y * mapx + x] == 0)
-				print_img((t_vec2){xo, yo}, "/ground.xpm");
-			else
-				print_img((t_vec2){xo, yo}, "/rock.xpm");
+			c = ml_begin(ML_PRIM_QUADS);
+			xo=x*maps;
+			yo=y*maps;
+			ml_vertex(&c, (t_vec2){xo, yo});
+			ml_vertex(&c, (t_vec2){xo, yo + maps});
+			ml_vertex(&c, (t_vec2){xo + maps, yo + maps});
+			ml_vertex(&c, (t_vec2){xo + maps, yo});
+			ml_settexture(&c, "/ground.xpm");
+			if (map[y*mapx+x] == 1) {ml_color(&c, 0xFFFFFF);} else ml_color(&c, 0);
+			ml_setintensity(&c, 0.4);
+			ml_end(&c);
 		}
 	}
 }
 
-void	drawplayer(void)
-{
-	t_prim p;
-
-	p = ml_begin(ML_PRIM_POINTS);
-	ml_size(&p, 8);
-	ml_vertex(&p, (t_vec2){px, py});
-	ml_color(&p, 0xFFFFFF);
-	ml_settexture(&p, "/link_head.xpm");
-	ml_size(&p, 13);
-	ml_setwrap(&p, ML_WRAP_REPEAT_CENTER);
-	ml_end(&p);
-	p = ml_begin(ML_PRIM_LINES);
-	ml_vertex(&p, (t_vec2){px, py});
-	ml_vertex(&p, (t_vec2){px + pdx * 5, py + pdy * 5});
-	ml_size(&p, 1);
-	ml_color(&p, 0xFFFF00);
-	ml_end(&p);
-}
-
 int	display(t_ml *lx)
 {
-	__uint64_t i = 0;
+	if (lx->refresh)
+	{
+		lx->refresh = 0;
 
-	lx->purge_window();
-	draw_map2d();
-	drawplayer();
-	drawrays3d();
-	while (i < 0x1FFFFFFF)
-		i++;
-	move = 0;
+		lx->purge_window();
+		generate_minimap();
+		//drawplayer();
+		drawrays3d();
+		move = 0;
+	}
 	return (1);
 }
 
-static int	hook_keyboard(int ks, void *b)
+static int	hook_keyboard(int ks, t_ml *lx)
 {
-	(void)b;
-	if (ks == XK_w)
+	t_cb	*cub;
+
+	cub = g_cub(ACT_GET);
+	if (cub)
 	{
-		px+=pdx*5; py+=pdy*5;
+		if (ks == XK_w)
+		{
+			cub->player.mm_origin.x += (pdx * 5);
+			cub->player.mm_origin.y += (pdy * 5);
+			px += pdx * 5;
+			py += pdy * 5;
+		}
+		else if (ks == XK_s)
+		{
+			cub->player.mm_origin.x -= (pdx * 5);
+			cub->player.mm_origin.y -= (pdy * 5);
+			px -= pdx * 5;
+			py -= pdy * 5;
+		}
+		else if (ks == XK_a)
+		{
+			pa+=5; pa=FixAng(pa); pdx=cos(degToRad(pa)); pdy=-sin(degToRad(pa));
+		}
+		else if (ks == XK_d)
+		{
+			pa-=5; pa=FixAng(pa); pdx=cos(degToRad(pa)); pdy=-sin(degToRad(pa));
+		}
 	}
-	else if (ks == XK_s)
-	{
-		px-=pdx*5; py-=pdy*5;
-	}
-	else if (ks == XK_a)
-	{
-		pa+=5; pa=FixAng(pa); pdx=cos(degToRad(pa)); pdy=-sin(degToRad(pa));
-	}
-	else if (ks == XK_d)
-	{
-		pa-=5; pa=FixAng(pa); pdx=cos(degToRad(pa)); pdy=-sin(degToRad(pa));
-	}
+	lx->refresh = 1;
 	move = 1;
 	return (1);
 }
@@ -213,13 +218,16 @@ static int	hook_keyboard(int ks, void *b)
 int	main(void)
 {
 	t_ml		*lx;
+	t_cb		*cub;
 
 	lx = gmlx(ACT_INIT);
-	if (lx)
+	cub = g_cub(ACT_INIT);
+	if (lx && cub)
 	{
 		lx->purge_color = 0x7f7f7f;
 		if (lx->set_win_size(1920, 1080) && lx->make_window("OpenMLX Showcase"))
 		{
+			get_porigin();
 			register_img("./textures/brick_argb.xpm");
 			register_img("./textures/ground.xpm");
 			register_img("./textures/rock.xpm");
@@ -228,9 +236,10 @@ int	main(void)
 			py = 220;
 			pa=90;
 			pdx=cos(degToRad(pa));
-			pdy=-sin(degToRad(pa)); 
+			pdy=-sin(degToRad(pa));
+			lx->refresh = 0;
 			mlx_loop_hook(lx->ptr, display, lx);
-			mlx_hook(lx->win, KeyPress, (1L << 0), hook_keyboard, NULL);
+			mlx_hook(lx->win, KeyPress, (1L << 0), hook_keyboard, lx);
 			mlx_loop(lx->ptr);
 			while (1)
 				;

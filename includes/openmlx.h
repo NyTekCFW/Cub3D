@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:12:25 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/04 11:47:04 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/05 18:02:01 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 
 # define PI 3.14159265359
 # define GRAPHICS_SYNC_DELAY 0//1600
-//#define SO_LONG_PROJECT 1
+//# define SO_LONG_PROJECT 1
 
 typedef struct ml_s
 {
@@ -51,6 +51,7 @@ typedef struct ml_s
 	void		(*(quit_window))();
 	t_texture	texture;
 	__uint32_t	purge_color;
+	int			refresh;
 }	t_ml;
 
 t_ml	*gmlx(int e_gmlxact);

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:51:42 by lchiva            #+#    #+#             */
-/*   Updated: 2024/05/31 16:14:09 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/06 06:34:52 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,6 @@ typedef struct vec4_s
 
 void		set_value(void *adr, __uint32_t val);
 __uint32_t	get_value(void *adr);
+float		deg_to_rad(int a);
+int			fix_angle(int a);
 #endif
