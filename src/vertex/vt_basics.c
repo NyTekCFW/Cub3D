@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:30:01 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/02 12:14:21 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/08 20:05:31 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ t_prim	ml_begin(int prim)
 
 	xmemset(&tmp, 0, sizeof(t_prim));
 	tmp.primitive = prim;
-	tmp.size = 2;
+	tmp.size = 1;
 	tmp.intensity = 1.0f;
+	tmp.savemesh = NULL;
 	if (prim != ML_PRIM_LINE_LOOP && prim != ML_PRIM_LINE_STRIP)
 		tmp.mode = ML_MODE_FILL;
 	else
@@ -62,7 +63,7 @@ void	ml_end(t_prim *s)
 		ml_draw_triangles(s);
 	else if (s->primitive == ML_PRIM_QUADS && s->cpoint == 4)
 		ml_draw_quads(s);
-	else if (s->primitive == ML_PRIM_POLYGON && s->cpoint >= 4)
+	else if (s->primitive == ML_PRIM_POLYGON && s->cpoint >= 3)
 		ml_draw_polygon(s);
 	else if (s->primitive == ML_PRIM_QUAD_STRIP
 		&& s->cpoint >= 4 && (s->cpoint % 4) == 0)

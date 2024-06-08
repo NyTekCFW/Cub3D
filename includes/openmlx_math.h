@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:51:42 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/06 06:34:52 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/07 23:42:46 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ typedef struct vec2_s
 	int	x;
 	int	y;
 }	t_vec2;
+
+typedef struct vec2f_s
+{
+	float	x;
+	float	y;
+}	t_vec2f;
 
 typedef struct vec3_s
 {
@@ -36,6 +42,5 @@ typedef struct vec4_s
 
 void		set_value(void *adr, __uint32_t val);
 __uint32_t	get_value(void *adr);
-float		deg_to_rad(int a);
-int			fix_angle(int a);
+float		dist(t_vec2f a, t_vec2f b);
 #endif

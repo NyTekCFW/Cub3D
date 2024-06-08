@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:23:13 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/02 12:40:32 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/07 15:56:28 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct prim_s
 	int			wrapping;
 	int			texture;
 	t_img		*img;
+	t_img		*savemesh;
 	float		intensity;
 	__uint32_t	color_texture;
 	__uint32_t	color;
@@ -36,6 +37,7 @@ void	ml_settexture(t_prim *s, char *name);
 void	ml_setintensity(t_prim *s, float i);
 void	ml_setuv(t_prim *s, int uv);
 void	ml_setwrap(t_prim *s, int wrap);
+void	ml_savemesh(t_prim *s, t_shaders *sh);
 void	ml_end(t_prim *s);
 void	ml_put_pixel(int x, int y, __uint32_t color);
 void	ml_draw_points(t_prim *s);

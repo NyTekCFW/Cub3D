@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 11:09:48 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/02 14:41:57 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/07 16:15:39 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ static void	ml_draw_triangles_rendering(t_prim *s, int xinter[], t_vec4 *ijt)
 	while (ijt->y <= xinter[ijt->x + 1])
 	{
 		if (ml_can_draw(s, (t_vec2){ijt->y, ijt->w}))
-			ml_put_pixel(ijt->y, ijt->w, s->color);
+		{
+			if (s->savemesh)
+				set_color(s->savemesh, get_px_adr(s->savemesh,
+						(t_vec2){ijt->y, ijt->w}), s->color);
+			else
+				ml_put_pixel(ijt->y, ijt->w, s->color);
+		}
 		ijt->y++;
 	}
 }
