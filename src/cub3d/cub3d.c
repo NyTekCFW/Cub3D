@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 18:06:33 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/08 20:00:43 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/09 15:04:43 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_cb	*g_cub(int act)
 	{
 		map_init(cub);
 		minimap_settings(cub);
+		player_settings(cub);
 		return (cub);
 	}
 	else if (act == ACT_GET && cub)

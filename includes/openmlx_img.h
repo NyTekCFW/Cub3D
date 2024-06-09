@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 06:08:03 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/02 11:33:22 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/09 03:32:16 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void		register_img(char *path);
 void		print_img(t_vec2 pos, char *name);
 void		purge_textures(void);
 t_shaders	*get_img(char *name);
+int			split_image(char *name, char *output, int width, int i);
 __uint32_t	blend_colors(__uint32_t bkg, __uint32_t frg, float alpha);
 void		set_color(t_img *img, int adr, __uint32_t clr);
 __uint32_t	get_px_color(t_img *img, int adr);

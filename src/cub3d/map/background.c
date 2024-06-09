@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 20:10:03 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/08 20:22:08 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/09 17:13:43 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,11 @@ void	build_images(void)
 	{
 		create_img((t_ui){0, 0, lx->width, lx->height, 0},
 			skybox_build, "skybox_cub3d");
+		create_img((t_ui){0, 0, lx->width, lx->height, 0},
+			fill_img_color, "framework");
 		create_img((t_ui){0, 0, cub->minimap.width + 1,
 			cub->minimap.height + 1, 0}, fill_img_color, "icon_minimap");
+		create_img((t_ui){0, 0, 569,
+			320, 0}, fill_img_color, "dump_hand");
 	}
 }

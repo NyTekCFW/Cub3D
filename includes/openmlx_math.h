@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:51:42 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/07 23:42:46 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/09 04:31:16 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ typedef struct vec2_s
 
 typedef struct vec2f_s
 {
-	float	x;
-	float	y;
+	double	x;
+	double	y;
 }	t_vec2f;
 
 typedef struct vec3_s
