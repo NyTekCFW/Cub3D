@@ -6,33 +6,34 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 16:47:29 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/09 20:55:39 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/12 05:09:55 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/cub3d.h"
-
-#define MAP_WIDTH 24
-#define MAP_HEIGHT 4
-
-char g_map[MAP_HEIGHT][MAP_WIDTH] =
-{
-	{'1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
-    {'1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'},
-    {'1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'},
-    {'1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'}
-};
 
 void	draw_line(int x, int draw_start, int draw_end, int color)
 {
 	t_shaders	*sh;
 	int			y;
 
-	y = draw_start;
 	sh = get_img("framework");
+	y = 0;
+	while (y < draw_start)
+	{
+		set_color(&sh->img, get_px_adr(&sh->img, (t_vec2){x, y}), 0x00ffff);
+		y++;
+	}
+	y = draw_start;
 	while (y < draw_end)
 	{
 		set_color(&sh->img, get_px_adr(&sh->img, (t_vec2){x, y}), color);
+		y++;
+	}
+	y = draw_end;
+	while (y < sh->img.height)
+	{
+		set_color(&sh->img, get_px_adr(&sh->img, (t_vec2){x, y}), 0x00ff00);
 		y++;
 	}
 }
@@ -53,7 +54,8 @@ void	ray_dda(t_ray *ray, t_cb *cub, t_ml *lx)
 			ray->map.y += ray->step.y;
 			ray->side = 1;
 		}
-		if (cub->map_data.map[ray->map.y][ray->map.x] > '0')
+		if (cub->map_data.map[ray->map.y / cub->minimap.dimension]
+			[ray->map.x / cub->minimap.dimension] > '0')
 			ray->hit = 1;
 	}
 	if (ray->side == 0)
@@ -99,7 +101,7 @@ void	init_ray(t_ray *ray, t_ml *lx, t_cb *cub, int x)
 	t_player	*player;
 
 	player = &cub->player;
-	ray->camera = 2 * x / (double)lx->width - 1;
+	ray->camera = (2 * x) / (double)lx->width - 1;
 	ray->dir.x = player->dir.x + player->plane.x * ray->camera;
 	ray->dir.y = player->dir.y + player->plane.y * ray->camera;
 	ray->map = (t_vec2){(int)player->origin.x, (int)player->origin.y};
@@ -107,18 +109,20 @@ void	init_ray(t_ray *ray, t_ml *lx, t_cb *cub, int x)
 	ray->hit = 0;
 	ray_step(ray, cub);
 	ray_dda(ray, cub, lx);
-	ray->draw_start = (-ray->line_height / 2) + (lx->height / 2);
+	ray->draw_start = (-ray->line_height / 2) + (lx->height / 2) + ((lx->height / 2) * tan(player->vangle));
 	if (ray->draw_start < 0)
 		ray->draw_start = 0;
-	ray->draw_end = (ray->line_height / 2) + (lx->height / 2);
+	ray->draw_end = (ray->line_height / 2) + (lx->height / 2) + ((lx->height / 2) * tan(player->vangle));
 	if (ray->draw_end >= lx->height)
 		ray->draw_end = lx->height - 1;
 	ray->color = 0xFF0000;
-	if (cub->map_data.map[ray->map.y][ray->map.x] != '1')
+	if (cub->map_data.map[ray->map.y / cub->minimap.dimension]
+		[ray->map.x / cub->minimap.dimension] != '1')
 		ray->color = 0xFFFF00;
 	if (ray->side == 1)
 		ray->color = ray->color / 2;
-	draw_line(x, ray->draw_start, ray->draw_end, ray->color);
+	if (ray->draw_end >= 0 && ray->draw_end < lx->height)
+		draw_line(x, ray->draw_start, ray->draw_end, ray->color);
 }
 
 void	raycasting(void)

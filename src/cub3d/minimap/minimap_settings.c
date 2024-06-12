@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 20:47:32 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/09 17:49:36 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/12 08:31:17 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,9 @@ void	minimap_settings(t_cb *cub)
 		mm->dimension = mp->dimension;
 		mm->origin = (t_vec2){0, 0};
 		mm->size = 150;
-		mm->min = 32;
+		mm->min = 8;
 		mm->cone_wireframe = 1;
-		mm->minimap_wireframe = 1;
+		mm->minimap_wireframe = 0;
 		minimap_scaling(mm, mp);
 	}
 }

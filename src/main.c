@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/09 19:59:03 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/12 09:32:29 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,131 @@ void draw_cone(void)
 		ml_end(&g);
 	}
 }*/
+void	buffer_img(t_shaders *dest, t_shaders *base, t_vec2 at)
+{
+	__uint32_t	adr;
+	t_vec2		i;
 
+	i = (t_vec2){0, 0};
+	if (dest && base)
+	{
+		while (i.y < base->img.height)
+		{
+			i.x = 0;
+			while (i.x < base->img.width)
+			{
+				if ((at.x + i.x) >= 0 && (at.x + i.x) < dest->img.width
+					&& (at.y + i.y) >= 0 && (at.y + i.y) < dest->img.height)
+				{
+					adr = get_px_color(&base->img, get_px_adr(&base->img, i));
+					if (is_valid_color(adr))
+						set_color(&dest->img, get_px_adr(&dest->img,
+								(t_vec2){at.x + i.x, at.y + i.y}), adr);
+				}
+				i.x++;
+			}
+			i.y++;
+		}
+	}
+}
+
+void	build_weapon(t_ml *lx)
+{
+	t_cb		*cub;
+	t_weapon	*wpn;
+	t_vec2		u;
+	t_vec2		i;
+	char		m[15];
+
+	cub = g_cub(ACT_GET);
+	i.x = 0;
+	i.y = 0;
+	if (cub)
+	{
+		wpn = &cub->player.weapon;
+		u.x = lx->width - 288;
+		u.y = lx->height - 64;
+		i.x = 0;
+		if (wpn->max_ammo_clip < 100)
+			i.x++;
+		if (wpn->max_ammo_clip < 10)
+			i.x++;
+		while (i.x < 3)
+		{
+			xmemcpy(m, "counter_000\0", 15);
+			if (i.x == 0)
+				m[10] = 0x30 + (wpn->ammo_clip / 100);
+			else if (i.x == 1)
+				m[10] = 0x30 + ((wpn->ammo_clip / 10) % 10);
+			else if (i.x == 2)
+				m[10] = 0x30 + (wpn->ammo_clip % 10);
+			buffer_img(get_img("framework"), get_img(m), (t_vec2){u.x + (24 * i.x), u.y});
+			i.x++;
+		}
+	}
+}
+
+void	typewritter(char *str, t_vec2 v)
+{
+	size_t	i;
+	char	m[15];
+	int		c;
+
+	i = 0;
+	while (str[i])
+	{
+		c = 0;
+		xmemcpy(m, "\0", 15);
+		if (str[i] >= 'A' && str[i] <= 'Z')
+		{
+			xmemcpy(m, "uletter_000\0", 15);
+			c = 'A';
+		}
+		else if (str[i] >= 'a' && str[i] <= 'z')
+		{
+			xmemcpy(m, "lletter_000\0", 15);
+			c = 'a';
+		}
+		else if (str[i] >= '0' && str[i] <= '9')
+		{
+			xmemcpy(m, "counter_000\0", 15);
+			c = '0';
+		}
+		m[9] = 0x30 + (((str[i] - c) / 10) % 10);
+		m[10] = 0x30 + ((str[i] - c) % 10);
+		buffer_img(get_img("framework"), get_img(m),
+			(t_vec2){v.x + (i * 24), v.y});
+		i++;
+	}
+}
+/*
+char		m[15];
+		while (i < 26)
+		{
+			xmemcpy(m, "lletter_000\0", 15);
+			m[9] = 0x30 + ((i / 10) % 10);
+			m[10] = 0x30 + (i % 10);
+			buffer_img(get_img("framework"), get_img(m), (t_vec2){i * 28, 300});
+			i++;
+		}
+*/
 int	display(t_ml *lx)
 {
 	if (lx->refresh  || move)
 	{
 		lx->refresh = 0;
-		lx->purge_window();
-		print_img((t_vec2){0, 0}, "skybox_cub3d");
-		print_img((t_vec2){0, 0}, "icon_minimap");
+		//lx->purge_window();
+		//print_img((t_vec2){0, 0}, "skybox_cub3d");
+		//print_img((t_vec2){0, 0}, "icon_minimap");
 		//t_players f;
 		//	init_player(&f);
 		//return ;
 		raycasting();
+		build_weapon(lx);
+		buffer_img(get_img("framework"), get_img("icon_minimap"), (t_vec2){0, 0});
+		typewritter("Hold F to open", (t_vec2){0, 300});
 		print_img((t_vec2){0, 0}, "framework");
+		
 		//draw_cone();
 		//generate_minimap();
 		//drawplayer();
@@ -86,48 +197,71 @@ int	display(t_ml *lx)
 	return (1);
 }
 
-static int	hook_keyboard(int ks, t_ml *lx)
+
+void move_forward(t_cb *cub)
+{
+    t_player *player = &cub->player;
+    if (cub->map_data.map[(int)(player->origin.y) / cub->minimap.dimension][(int)(player->origin.x + player->dir.x * 0.1) / cub->minimap.dimension] == '0')
+        player->origin.x += player->dir.x * 0.1;
+    if (cub->map_data.map[(int)(player->origin.y + player->dir.y * 0.1) / cub->minimap.dimension][(int)(player->origin.x) / cub->minimap.dimension] == '0')
+        player->origin.y += player->dir.y * 0.1;
+}
+
+void move_backward(t_cb *cub)
+{
+    t_player *player = &cub->player;
+    if (cub->map_data.map[(int)(player->origin.y / cub->minimap.dimension)][(int)(player->origin.x - player->dir.x * 0.1)  / cub->minimap.dimension] == '0')
+        player->origin.x -= player->dir.x * 0.1;
+    if (cub->map_data.map[(int)(player->origin.y - player->dir.y * 0.1)  / cub->minimap.dimension][(int)(player->origin.x)  / cub->minimap.dimension] == '0')
+        player->origin.y -= player->dir.y * 0.1;
+}
+
+void move_left(t_cb *cub)
+{
+    t_player *player = &cub->player;
+    double old_dir_x = player->dir.x;
+    player->dir.x = player->dir.x * cos(-0.1) - player->dir.y * sin(-0.1);
+    player->dir.y = old_dir_x * sin(-0.1) + player->dir.y * cos(-0.1);
+    double old_plane_x = player->plane.x;
+    player->plane.x = player->plane.x * cos(-0.1) - player->plane.y * sin(-0.1);
+    player->plane.y = old_plane_x * sin(-0.1) + player->plane.y * cos(-0.1);
+}
+
+void move_right(t_cb *cub) 
+{
+    t_player *player = &cub->player;
+    double old_dir_x = player->dir.x;
+    player->dir.x = player->dir.x * cos(0.1) - player->dir.y * sin(0.1);
+    player->dir.y = old_dir_x * sin(0.1) + player->dir.y * cos(0.1);
+    double old_plane_x = player->plane.x;
+    player->plane.x = player->plane.x * cos(0.1) - player->plane.y * sin(0.1);
+    player->plane.y = old_plane_x * sin(0.1) + player->plane.y * cos(0.1);
+}
+
+int hook_keyboard(int keycode, t_ml *lx)
 {
 	t_cb	*cub;
 
 	cub = g_cub(ACT_GET);
-	(void)ks;
-	if (cub)
-	{
-		if (ks == XK_w)
-		{
-			cub->player.origin.x += 0.2;//cub->player.pad.x;
-			cub->player.origin.y += 0.2;//cub->player.pad.y;
-			px+=pdx*5; py+=pdy*5;
-		}
-		else if (ks == XK_s)
-		{
-			cub->player.origin.x -= 0.2;//cub->player.pad.x;
-			cub->player.origin.y -= 0.2;//cub->player.pad.y;
-			px-=pdx*5; py-=pdy*5;
-		}
-		else if (ks == XK_a)
-		{
-			pa+=5; pa=FixAng(pa); pdx=cos(degToRad(pa)); pdy=-sin(degToRad(pa));
-			//cub->player.angle -= 0.1;
-			//if (cub->player.angle <= 0)
-			//	cub->player.angle += (PI * 2);
-		}
-		else if (ks == XK_d)
-		{
-			pa-=5; pa=FixAng(pa); pdx=cos(degToRad(pa)); pdy=-sin(degToRad(pa));
-			//cub->player.angle += 0.1;
-			//if (cub->player.angle >= (PI * 2))
-			//	cub->player.angle -= (PI * 2);
-		}
-		//cub->player.pad.x = cos(cub->player.angle) * 0.2;
-		//cub->player.pad.y = sin(cub->player.angle) * 0.2;
-	//	printf("angle = %f\n", cub->player.angle);
-	}
+	if (keycode == XK_w) // Flèche haut
+		move_forward(cub);
+    else if (keycode == XK_s) // Flèche bas
+		move_backward(cub);
+    else if (keycode == XK_a) // Flèche gauche
+		move_left(cub);
+    else if (keycode == XK_d) // Flèche droite
+		move_right(cub);
+	else if (keycode == XK_y)
+		cub->player.vangle += 0.1;//1.5max
+	else if (keycode == XK_u)
+		cub->player.vangle -= 0.1;//-0.8max
+	else if (keycode == XK_v)
+		cub->player.weapon.ammo_clip -= 1;
 	lx->refresh = 1;
 	move = 1;
 	return (1);
 }
+
 
 void	register_hands(void)
 {
@@ -189,7 +323,13 @@ int	main(void)
 			register_img("./textures/brick_argb.xpm");
 			register_img("./textures/ground.xpm");
 			register_img("./textures/rock.xpm");
+			register_img("./textures/fonts/digits.xpm");
+			register_img("./textures/fonts/alpha_upper.xpm");
+			register_img("./textures/fonts/alpha_lower.xpm");
 			register_img("./textures/link_head.xpm");
+			split_image("/digits.xpm", "counter_", 23, 0);
+			split_image("/alpha_upper.xpm", "uletter_", 25, 0);
+			split_image("/alpha_lower.xpm", "lletter_", 25, 0);
 			px = cub->player.origin.x;
 			py = cub->player.origin.y;
 			pa=90;
@@ -211,3 +351,4 @@ int	main(void)
 		}
 	}
 }
+//https://smallseotools.com/text-to-image/

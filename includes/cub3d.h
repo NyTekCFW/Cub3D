@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 18:07:00 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/09 18:51:08 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/12 06:34:52 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,25 @@ typedef struct mm_s
 	int		min;
 }	t_mm;
 
+typedef struct weapon_s
+{
+	__uint32_t	debugname;
+	char		weaponname[32];
+	int			id;
+	int			type;
+	__uint32_t	ammo_stock;
+	__uint32_t	ammo_clip;
+	__uint32_t	max_ammo_stock;
+	__uint32_t	max_ammo_clip;
+}	t_weapon;
+
 typedef struct player_s
 {
-	t_vec2f	origin;
-	t_vec2f	dir;
-	t_vec2f	plane;
+	t_vec2f		origin;
+	t_vec2f		dir;
+	t_vec2f		plane;
+	double		vangle;
+	t_weapon	weapon;
 }	t_player;
 
 
