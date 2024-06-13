@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 16:47:29 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/12 05:09:55 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/12 23:36:15 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,10 @@ void	ray_dda(t_ray *ray, t_cb *cub, t_ml *lx)
 			ray->map.y += ray->step.y;
 			ray->side = 1;
 		}
-		if (cub->map_data.map[ray->map.y / cub->minimap.dimension]
-			[ray->map.x / cub->minimap.dimension] > '0')
+		if (check_move(cub, (t_vec2){ray->map.x / cub->map_data.envdist,
+			ray->map.y / cub->map_data.envdist})
+		&& cub->map_data.map[ray->map.y / cub->map_data.envdist]
+		[ray->map.x / cub->map_data.envdist] > '0')
 			ray->hit = 1;
 	}
 	if (ray->side == 0)
@@ -116,8 +118,10 @@ void	init_ray(t_ray *ray, t_ml *lx, t_cb *cub, int x)
 	if (ray->draw_end >= lx->height)
 		ray->draw_end = lx->height - 1;
 	ray->color = 0xFF0000;
-	if (cub->map_data.map[ray->map.y / cub->minimap.dimension]
-		[ray->map.x / cub->minimap.dimension] != '1')
+	if (check_move(cub, (t_vec2){ray->map.x / cub->map_data.envdist,
+			ray->map.y / cub->map_data.envdist})
+		&& cub->map_data.map[ray->map.y / cub->map_data.envdist]
+		[ray->map.x / cub->map_data.envdist] != '1')
 		ray->color = 0xFFFF00;
 	if (ray->side == 1)
 		ray->color = ray->color / 2;

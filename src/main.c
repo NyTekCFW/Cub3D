@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/12 09:32:29 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/13 09:08:26 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,33 +130,24 @@ void	build_weapon(t_ml *lx)
 void	typewritter(char *str, t_vec2 v)
 {
 	size_t	i;
-	char	m[15];
+	char	m[17];
 	int		c;
 
 	i = 0;
 	while (str[i])
 	{
 		c = 0;
-		xmemcpy(m, "\0", 15);
-		if (str[i] >= 'A' && str[i] <= 'Z')
+		xmemcpy(m, "\0", 17);
+		if (str[i] >= '!' && str[i] <= '~')
 		{
-			xmemcpy(m, "uletter_000\0", 15);
-			c = 'A';
+			xmemcpy(m, "monospace_000\0", 17);
+			c = 0x21;
 		}
-		else if (str[i] >= 'a' && str[i] <= 'z')
-		{
-			xmemcpy(m, "lletter_000\0", 15);
-			c = 'a';
-		}
-		else if (str[i] >= '0' && str[i] <= '9')
-		{
-			xmemcpy(m, "counter_000\0", 15);
-			c = '0';
-		}
-		m[9] = 0x30 + (((str[i] - c) / 10) % 10);
-		m[10] = 0x30 + ((str[i] - c) % 10);
+		m[11] = 0x30 + (((str[i] - c) / 10) % 10);
+		m[12] = 0x30 + ((str[i] - c) % 10);
+		printf("->%s\n", m);
 		buffer_img(get_img("framework"), get_img(m),
-			(t_vec2){v.x + (i * 24), v.y});
+			(t_vec2){v.x + (i * 18), v.y});
 		i++;
 	}
 }
@@ -185,7 +176,7 @@ int	display(t_ml *lx)
 		raycasting();
 		build_weapon(lx);
 		buffer_img(get_img("framework"), get_img("icon_minimap"), (t_vec2){0, 0});
-		typewritter("Hold F to open", (t_vec2){0, 300});
+		typewritter("Hold F to open [Cost: 4000$]", (t_vec2){0, 300});
 		print_img((t_vec2){0, 0}, "framework");
 		
 		//draw_cone();
@@ -197,23 +188,60 @@ int	display(t_ml *lx)
 	return (1);
 }
 
+int	check_move(t_cb *cub, t_vec2 v)
+{
+	if (v.x >= 0 && v.x < cub->map_data.width)
+	{
+		if (v.y >= 0 && v.y < cub->map_data.height)
+			return (1);
+	}
+	return (0);
+}
 
 void move_forward(t_cb *cub)
 {
-    t_player *player = &cub->player;
-    if (cub->map_data.map[(int)(player->origin.y) / cub->minimap.dimension][(int)(player->origin.x + player->dir.x * 0.1) / cub->minimap.dimension] == '0')
-        player->origin.x += player->dir.x * 0.1;
-    if (cub->map_data.map[(int)(player->origin.y + player->dir.y * 0.1) / cub->minimap.dimension][(int)(player->origin.x) / cub->minimap.dimension] == '0')
-        player->origin.y += player->dir.y * 0.1;
-}
+	t_vec2		v;
+	t_player	*player;
 
+	player = &cub->player;
+	v = (t_vec2){(int)(player->origin.x + player->dir.x * 0.1)
+		/ cub->map_data.envdist, (int)(player->origin.y)
+		/ cub->map_data.envdist};
+	if (check_move(cub, v) && cub->map_data.map[v.y][v.x] == '0')
+		player->origin.x += player->dir.x * 0.1;
+	v = (t_vec2){(int)(player->origin.x) / cub->map_data.envdist,
+		(int)(player->origin.y + player->dir.y * 0.1)
+		/ cub->map_data.envdist};
+	if (check_move(cub, v) && cub->map_data.map[v.y][v.x] == '0')
+		player->origin.y += player->dir.y * 0.1;
+}
+/*
 void move_backward(t_cb *cub)
 {
-    t_player *player = &cub->player;
-    if (cub->map_data.map[(int)(player->origin.y / cub->minimap.dimension)][(int)(player->origin.x - player->dir.x * 0.1)  / cub->minimap.dimension] == '0')
-        player->origin.x -= player->dir.x * 0.1;
-    if (cub->map_data.map[(int)(player->origin.y - player->dir.y * 0.1)  / cub->minimap.dimension][(int)(player->origin.x)  / cub->minimap.dimension] == '0')
-        player->origin.y -= player->dir.y * 0.1;
+	t_vec2		v;
+	t_player	*player;
+
+	player = &cub->player;
+	v = (t_vec2){(int)(player->origin.x - player->dir.x * 0.1)
+		/ cub->map_data.envdist,
+		(int)(player->origin.y / cub->map_data.envdist)};
+	if (check_move(cub, v) && cub->map_data.map[v.y][v.x] == '0')
+		player->origin.x -= player->dir.x * 0.1;
+	v = (t_vec2){(int)(player->origin.x) / cub->map_data.envdist,
+		(int)(player->origin.y - player->dir.y * 0.1)};
+	if (check_move(cub, v) && cub->map_data.map[v.y][v.x] == '0')
+		player->origin.y -= player->dir.y * 0.1;
+}
+*/
+void	move_backward(t_cb *cub)
+{
+	t_player	*player;
+
+	player = &cub->player;
+	if (cub->map_data.map[(int)(player->origin.y / cub->map_data.envdist)][(int)(player->origin.x - player->dir.x * 0.1 / cub->map_data.envdist)] == '0')
+		player->origin.x -= player->dir.x * 0.1;
+	if (cub->map_data.map[(int)((player->origin.y - player->dir.y * 0.1) / cub->map_data.envdist)][(int)(player->origin.x)] == '0')
+		player->origin.y -= player->dir.y * 0.1;
 }
 
 void move_left(t_cb *cub)
@@ -255,8 +283,8 @@ int hook_keyboard(int keycode, t_ml *lx)
 		cub->player.vangle += 0.1;//1.5max
 	else if (keycode == XK_u)
 		cub->player.vangle -= 0.1;//-0.8max
-	else if (keycode == XK_v)
-		cub->player.weapon.ammo_clip -= 1;
+	//else if (keycode == XK_v)
+	//	cub->player.weapon.ammo_clip -= 1;
 	lx->refresh = 1;
 	move = 1;
 	return (1);
@@ -305,7 +333,27 @@ void	register_hands(void)
 		b--;
 	}
 }
+int mouse_move(int x, int y, void *app)
+{
+	(void)app;
+    printf("Mouse moved to (%d, %d)\n", x, y);
+    return (0);
+}
+void hide_cursor(void)
+{
+    Pixmap no_data;
+    XColor black;
+    static char empty[] = {0};
+    Cursor cursor;
 
+    black.red = black.green = black.blue = 0;
+
+    no_data = XCreateBitmapFromData(app->display, app->window, empty, 1, 1);
+    cursor = XCreatePixmapCursor(app->display, no_data, no_data, &black, &black, 0, 0);
+    XDefineCursor(app->display, app->window, cursor);
+    XFreeCursor(app->display, cursor);
+    XFreePixmap(app->display, no_data);
+}
 //Setup Exemple
 int	main(void)
 {
@@ -323,13 +371,14 @@ int	main(void)
 			register_img("./textures/brick_argb.xpm");
 			register_img("./textures/ground.xpm");
 			register_img("./textures/rock.xpm");
-			register_img("./textures/fonts/digits.xpm");
-			register_img("./textures/fonts/alpha_upper.xpm");
-			register_img("./textures/fonts/alpha_lower.xpm");
+			register_img("./textures/fonts/monospace_ttf.xpm");
+		//	register_img("./textures/fonts/digits.xpm");
+		//	register_img("./textures/fonts/alpha_upper.xpm");
+		//	register_img("./textures/fonts/alpha_lower.xpm");
 			register_img("./textures/link_head.xpm");
-			split_image("/digits.xpm", "counter_", 23, 0);
-			split_image("/alpha_upper.xpm", "uletter_", 25, 0);
-			split_image("/alpha_lower.xpm", "lletter_", 25, 0);
+			split_image("/monospace_ttf.xpm", "monospace_", 32, 0);
+		//	split_image("/alpha_upper.xpm", "uletter_", 25, 0);
+		//	split_image("/alpha_lower.xpm", "lletter_", 25, 0);
 			px = cub->player.origin.x;
 			py = cub->player.origin.y;
 			pa=90;
@@ -337,13 +386,14 @@ int	main(void)
 			pdy=-sin(degToRad(pa));
 			lx->refresh = 0;
 			build_images();
-			build_minimap();
+			//build_minimap();
 			
-			//sleep(4);
+		//	sleep(4);
 		//	register_hands();
 			
 			mlx_loop_hook(lx->ptr, display, lx);
 			mlx_hook(lx->win, KeyPress, (1L << 0), hook_keyboard, lx);
+			mlx_hook(lx->win, MotionNotify, PointerMotionMask, mouse_move, NULL);
 			mlx_loop(lx->ptr);
 			while (1)
 				;

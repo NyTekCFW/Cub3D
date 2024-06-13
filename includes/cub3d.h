@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 18:07:00 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/12 06:34:52 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/13 03:59:02 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct ray_s
 //minimap
 typedef struct mm_s
 {
+	t_vec2f	porigin;
 	t_vec2	origin;
 	int		dimension;
 	int		cone_wireframe;
@@ -47,10 +48,10 @@ typedef struct mm_s
 
 typedef struct weapon_s
 {
-	__uint32_t	debugname;
-	char		weaponname[32];
+	char		weaponname[16];
 	int			id;
 	int			type;
+	__uint32_t	debugname;
 	__uint32_t	ammo_stock;
 	__uint32_t	ammo_clip;
 	__uint32_t	max_ammo_stock;
@@ -73,6 +74,7 @@ typedef struct map_s
 	int		width;
 	int		height;
 	int		dimension;
+	int		envdist;
 }	t_map;
 
 typedef struct cb_s
@@ -84,6 +86,7 @@ typedef struct cb_s
 
 t_cb	*g_cub(int act);
 //minimap
+int		check_move(t_cb *cub, t_vec2 v);
 void	build_images(void);
 void	minimap_settings(t_cb *cub);
 void	player_settings(t_cb *cub);
