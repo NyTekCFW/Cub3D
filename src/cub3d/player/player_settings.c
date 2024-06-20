@@ -5,27 +5,34 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/09 05:57:57 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/13 04:09:56 by lchiva           ###   ########.fr       */
+/*   Created: 2024/06/20 13:06:45 by lchiva            #+#    #+#             */
+/*   Updated: 2024/06/20 13:07:55 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/cub3d.h"
 
+int	check_move(t_cb *cub, t_vec2 v)
+{
+	if (v.x >= 0 && v.x < cub->map_data.width)
+	{
+		if (v.y >= 0 && v.y < cub->map_data.height)
+			return (1);
+	}
+	return (0);
+}
+
 void	player_assets(t_cb *cub, t_vec2 v)
 {
 	cub->player.origin = (t_vec2f)
-	{(double)(v.x * cub->map_data.envdist), (double)(v.y * cub->map_data.envdist * 1.2)};
+	{(double)v.x, (double)v.y * 1.2};
 	cub->player.dir = (t_vec2f){-1, 0};
 	cub->player.plane = (t_vec2f){0, 0.66};
 	cub->player.vangle = 0;
-	/*cub->player.weapon.ammo_clip = 30;
-	cub->player.weapon.ammo_stock = 240;
-	cub->player.weapon.max_ammo_clip = 300;
-	cub->player.weapon.max_ammo_stock = 240;
-	cub->player.weapon.debugname = 0xFFFFFF;
-	cub->player.weapon.id = 0;
-	cub->player.weapon.type = 2;*/
+	cub->player.health = 130;
+	cub->player.score = 500;
+	xalloc((void **)&cub->player.weapon, sizeof(t_weapon), 1);
+	give_weapon("M1911");
 }
 
 void	player_settings(t_cb *cub)

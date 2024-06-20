@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/05 18:07:00 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/13 03:59:02 by lchiva           ###   ########.fr       */
+/*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
+/*   Updated: 2024/06/20 13:27:02 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CUB3D_H
 
 # include "openmlx.h"
+# include "cub3d_wpn.h"
 
 typedef struct ray_s
 {
@@ -25,11 +26,13 @@ typedef struct ray_s
 	int		color;
 	double	camera;
 	double	pwall_dist;
+	double	wall_x;
 	t_vec2f	dir;
 	t_vec2f	side_dist;
 	t_vec2f	delta_dist;
 	t_vec2	map;
 	t_vec2	step;
+	t_vec2	amp;
 }	t_ray;
 
 //minimap
@@ -46,27 +49,17 @@ typedef struct mm_s
 	int		min;
 }	t_mm;
 
-typedef struct weapon_s
-{
-	char		weaponname[16];
-	int			id;
-	int			type;
-	__uint32_t	debugname;
-	__uint32_t	ammo_stock;
-	__uint32_t	ammo_clip;
-	__uint32_t	max_ammo_stock;
-	__uint32_t	max_ammo_clip;
-}	t_weapon;
-
 typedef struct player_s
 {
+	int			health;
+	int			score;
+	int			flashlight;
 	t_vec2f		origin;
 	t_vec2f		dir;
 	t_vec2f		plane;
 	double		vangle;
-	t_weapon	weapon;
+	t_weapon	*weapon;
 }	t_player;
-
 
 typedef struct map_s
 {
@@ -74,26 +67,31 @@ typedef struct map_s
 	int		width;
 	int		height;
 	int		dimension;
-	int		envdist;
 }	t_map;
 
 typedef struct cb_s
 {
-	t_mm		minimap;
-	t_map		map_data;
-	t_player	player;
+	t_mm			minimap;
+	t_map			map_data;
+	t_player		player;
+	t_weapon_data	weapons[2];
 }	t_cb;
 
+//cub struct
 t_cb	*g_cub(int act);
-//minimap
-int		check_move(t_cb *cub, t_vec2 v);
-void	build_images(void);
-void	minimap_settings(t_cb *cub);
-void	player_settings(t_cb *cub);
+void	initial_weapons_data(t_cb *cub);
+//raycasting
+void	raycast_env(void);
+void	ray_get_color(t_ray *ray);
+void	draw_ceiling(int x, t_ray *ray, t_player *p);
+void	draw_floor(int x, t_ray *ray, t_player *p);
+void	draw_walls(int x, t_ray *ray, t_player *p);
+void	flashlight_move(t_vec2 *u);
+//map
 void	map_init(t_cb *cub);
-void	draw_cone(void);
-void	player_init(void);
-void	raycasting(void);
-void	cone_begin(t_map *data, t_player *p, t_mm *mm, t_prim *g);
-void	build_minimap(void);
+//
+int		check_move(t_cb *cub, t_vec2 v);
+void	player_settings(t_cb *cub);
+//
+void	hud_render(void);
 #endif

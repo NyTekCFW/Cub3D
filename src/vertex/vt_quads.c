@@ -6,33 +6,11 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 08:32:45 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/07 15:59:43 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/07 18:06:29 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/openmlx.h"
-
-
-void mesh_to_img(t_prim *s, t_shaders *sh)
-{
-	t_vec2 u;
-
-	if (s->primitive == ML_PRIM_QUADS && s->cpoint == 4 && sh)
-	{
-		u = (t_vec2){s->point[0].x, s->point[0].y};
-		while (u.y < s->point[2].y)
-		{
-			u.x = 0;
-			while (u.x < s->point[2].x)
-			{
-				if (ml_can_draw(s, u))
-					set_color(&sh->img, get_px_adr(&sh->img, u), s->color);
-				u.x++;
-			}
-			u.y++;
-		}
-	}
-}
 
 static void	ml_draw_quads_rendering(t_prim *s, int xinter[], t_vec4 *ijt)
 {

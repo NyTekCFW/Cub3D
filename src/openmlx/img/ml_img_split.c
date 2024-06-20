@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/09 03:13:15 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/09 03:33:15 by lchiva           ###   ########.fr       */
+/*   Created: 2024/06/19 15:14:13 by lchiva            #+#    #+#             */
+/*   Updated: 2024/06/19 15:15:55 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ static void	update_splitted_name(char *buffer, size_t len, int i)
 
 static void	split(t_shaders **imgx, t_vec3 wh, int i)
 {
-	t_vec4	ifr;
-	t_vec2	adr;
+	t_vec4		ifr;
+	t_vec2		adr;
+	__uint32_t	v;
 
 	ifr.x = i * wh.x;
 	ifr.y = 0;
@@ -36,9 +37,9 @@ static void	split(t_shaders **imgx, t_vec3 wh, int i)
 			adr.x = ifr.y * imgx[0]->img.len + ifr.w * (imgx[0]->img.bpp / 8);
 			adr.y = ifr.y * imgx[1]->img.len + ifr.z * (imgx[1]->img.bpp / 8);
 			set_value(imgx[1]->img.addr + adr.y, 0);
-			if (get_value(imgx[0]->img.addr + adr.x) != 0xFF000000)
-				set_value(imgx[1]->img.addr + adr.y,
-					get_value(imgx[0]->img.addr + adr.x));
+			v = get_value(imgx[0]->img.addr + adr.x);
+			if (v != 0xFF000000)
+				set_value(imgx[1]->img.addr + adr.y, v);
 			ifr.z++;
 			ifr.w = ifr.x + ifr.z;
 		}
@@ -67,7 +68,6 @@ int	split_image(char *name, char *output, int width, int i)
 				imgx[1] = get_img(buffer);
 				if (imgx[1])
 					split(imgx, (t_vec3){width, imgx[0]->img.height, 0}, u);
-				printf("%s\n", buffer);
 				u++;
 			}
 		}

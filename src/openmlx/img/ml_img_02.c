@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 12:03:40 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/02 11:32:50 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/19 15:17:24 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	blitting_inc(t_shaders *d, t_vec2 xs, t_vec2 *xy, t_vec2 *rs)
 {
 	__uint32_t	c;
 
-	c = get_px_color(&d->img, get_px_adr(&d->img, *rs));
+	c = get_px_color(&d->img, *rs);
 	if (is_valid_color(c))
 		ml_put_pixel(xs.x + xy->x, xs.y + xy->y, c);
 	rs->x++;

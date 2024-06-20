@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:29:24 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/12 08:04:53 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/02 12:26:44 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,6 @@ enum e_gmlx
 	ACT_GET,
 	ACT_FREE,
 	ACT_MAX
-};
-
-enum e_weapons
-{
-	WPN_NONE	= 0,
-	WPN_M1911,
-	WPN_HAMR,
-	WPN_DSR
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:30:01 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/08 20:05:31 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/07 18:04:50 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@ t_prim	ml_begin(int prim)
 
 	xmemset(&tmp, 0, sizeof(t_prim));
 	tmp.primitive = prim;
-	tmp.size = 1;
+	tmp.size = 2;
 	tmp.intensity = 1.0f;
-	tmp.savemesh = NULL;
 	if (prim != ML_PRIM_LINE_LOOP && prim != ML_PRIM_LINE_STRIP)
 		tmp.mode = ML_MODE_FILL;
 	else

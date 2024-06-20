@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:33:10 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/08 19:58:04 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/08 19:29:53 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,30 +95,3 @@ void	ml_draw_lines(t_prim *s, int w, int e)
 		imz[0] += 1.0 / length;
 	}
 }
-
-/*
-
-
-void	ml_draw_lines(t_prim *s, int w, int e)
-{
-	double	d[2];
-	t_vec2	p[2];
-	double	length;
-	double	imz[3];
-
-	xmemcpy(imz, (double []){0.0, s->size / 2, 0.0}, sizeof(imz));
-	if (s->size == 1)
-		imz[1] = 0;
-	p[0] = (t_vec2){s->point[w].x, s->point[w].y};
-	p[1] = (t_vec2){s->point[e].x, s->point[e].y};
-	d[0] = p[1].x - p[0].x;
-	d[1] = p[1].y - p[0].y;
-	length = sqrt(d[0] * d[0] + d[1] * d[1]);
-	while (imz[0] < 1.0)
-	{
-		lines_render(s, imz, p, d);
-		imz[0] += 1.0 / length;
-	}
-}
-
-*/

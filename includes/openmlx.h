@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:12:25 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/07 22:52:09 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/20 13:09:20 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,8 @@
 # include "openmlx_vertex.h"
 
 # define PI 3.14159265359
-# define PI2 1.570796327
-# define PI3 4.71238898
-# define DR 0.0174533
 # define GRAPHICS_SYNC_DELAY 0//1600
-//# define SO_LONG_PROJECT 1
+//#define SO_LONG_PROJECT 1
 
 typedef struct ml_s
 {

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 11:52:54 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/08 19:29:45 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/19 15:17:32 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ml_can_draw(t_prim *s, t_vec2 xy)
 			image_mirror(s, &cv);
 		if (s->uv == ML_UV_90)
 			cv = (t_vec2){cv.y, cv.x};
-		s->color = get_px_color(s->img, get_px_adr(s->img, cv));
+		s->color = get_px_color(s->img, cv);
 		if (is_valid_color(s->color))
 		{
 			if (s->color_texture != 0xFFFFFF && s->color != 0x030303)

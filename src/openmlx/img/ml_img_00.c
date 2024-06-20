@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 08:34:10 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/02 12:32:25 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/19 15:16:46 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,24 @@ void	set_color(t_img *img, int adr, __uint32_t clr)
 	img->addr[adr + 2] = rgb.z;
 }
 
-__uint32_t	get_px_color(t_img *img, int adr)
-{
-	__uint32_t	pick;
-
-	pick = img->addr[adr + 2] << 16;
-	pick += img->addr[adr + 1] << 8;
-	pick += img->addr[adr];
-	return (pick);
-}
-
 __uint32_t	get_px_adr(t_img *img, t_vec2 xy)
 {
 	t_vec2	u;
 
 	u = (t_vec2){xy.x % img->width, xy.y % img->height};
 	return (u.y * img->len + u.x * (img->bpp / 8));
+}
+
+__uint32_t	get_px_color(t_img *img, t_vec2 xy)
+{
+	__uint32_t	pick;
+	__uint32_t	adr;
+
+	adr = get_px_adr(img, xy);
+	pick = img->addr[adr + 2] << 16;
+	pick += img->addr[adr + 1] << 8;
+	pick += img->addr[adr];
+	return (pick);
 }
 
 void	fill_img_color(t_img *dest, __uint32_t color)

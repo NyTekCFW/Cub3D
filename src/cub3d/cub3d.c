@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/05 18:06:33 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/09 15:04:43 by lchiva           ###   ########.fr       */
+/*   Created: 2024/06/19 15:34:11 by lchiva            #+#    #+#             */
+/*   Updated: 2024/06/20 13:19:37 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
-
 
 t_cb	*g_cub(int act)
 {
@@ -19,8 +18,8 @@ t_cb	*g_cub(int act)
 
 	if (act == ACT_INIT && xalloc((void **)&cub, 1, sizeof(t_cb)))
 	{
+		initial_weapons_data(cub);
 		map_init(cub);
-		minimap_settings(cub);
 		player_settings(cub);
 		return (cub);
 	}
