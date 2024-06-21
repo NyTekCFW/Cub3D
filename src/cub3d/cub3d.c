@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:34:11 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 13:19:37 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/20 17:29:32 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_cb	*g_cub(int act)
 
 	if (act == ACT_INIT && xalloc((void **)&cub, 1, sizeof(t_cb)))
 	{
+		initial_center_screen(cub);
 		initial_weapons_data(cub);
 		map_init(cub);
 		player_settings(cub);

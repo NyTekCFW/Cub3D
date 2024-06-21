@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 11:03:57 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 13:27:32 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/21 00:53:00 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,21 @@ sh->img.width, (y * cl->img.height) / ray->draw_start};
 c = blend_colors(get_px_color(&cl->img, cell), 0xFF0000, 0.4);
 */
 
-static void	ray_line(t_ray *ray, t_cb *cub, t_ml *lx)
+static void	ray_line(t_ray *ray, t_cb *cub)
 {
 	if (ray->side == 0)
 		ray->pwall_dist = (ray->side_dist.x - ray->delta_dist.x);
 	else
 		ray->pwall_dist = (ray->side_dist.y - ray->delta_dist.y);
-	ray->line_height = (int)(lx->height / ray->pwall_dist);
-	ray->draw_start = (-ray->line_height / 2) + (lx->height / 2)
-		+ ((lx->height / 2) * tan(cub->player.vangle));
+	ray->line_height = (int)(720 / ray->pwall_dist);
+	ray->draw_start = (-ray->line_height / 2) + 360
+		+ (360 * tan(cub->player.vangle));
 	if (ray->draw_start < 0)
 		ray->draw_start = 0;
-	ray->draw_end = (ray->line_height / 2) + (lx->height / 2)
-		+ ((lx->height / 2) * tan(cub->player.vangle));
-	if (ray->draw_end >= lx->height)
-		ray->draw_end = lx->height - 1;
+	ray->draw_end = (ray->line_height / 2) + 360
+		+ (360 * tan(cub->player.vangle));
+	if (ray->draw_end >= 720)
+		ray->draw_end = 719;
 	if (ray->side == 0)
 		ray->wall_x = cub->player.origin.y + ray->pwall_dist * ray->dir.y;
 	else
@@ -87,12 +87,12 @@ static void	ray_dda_step(t_ray *ray, t_player *p)
 	}
 }
 
-static void	init_ray(t_ray *ray, t_cb *cub, t_ml *lx, int x)
+static void	init_ray(t_ray *ray, t_cb *cub, int x)
 {
 	t_player	*player;
 
 	player = &cub->player;
-	ray->camera = (2 * x) / (double)lx->width - 1;
+	ray->camera = ((2 * x) / (double)1280 - 1) * (tan(player->fov / 2) * (double)(1280.0 / 720.0));
 	ray->dir.x = player->dir.x + player->plane.x * ray->camera;
 	ray->dir.y = player->dir.y + player->plane.y * ray->camera;
 	ray->map = (t_vec2){(int)player->origin.x, (int)player->origin.y};
@@ -100,9 +100,9 @@ static void	init_ray(t_ray *ray, t_cb *cub, t_ml *lx, int x)
 	ray->hit = 0;
 	ray_dda_step(ray, player);
 	ray_dda_hit(ray, cub);
-	ray_line(ray, cub, lx);
+	ray_line(ray, cub);
 	ray_get_color(ray);
-	if (ray->draw_end >= 0 && ray->draw_end < lx->height)
+	if (ray->draw_end >= 0 && ray->draw_end < 720)
 	{
 		draw_ceiling(x, ray, player);
 		draw_floor(x, ray, player);
@@ -128,9 +128,9 @@ void	raycast_env(void)
 	{
 		ray.amp = amp;
 		fill_img_color(&get_img("framework")->img, 0);
-		while (x < lx->width)
+		while (x < 1280)
 		{
-			init_ray(&ray, cub, lx, x);
+			init_ray(&ray, cub, x);
 			x++;
 		}
 	}

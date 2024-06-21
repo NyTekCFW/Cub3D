@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 13:22:42 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/21 01:54:46 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,41 @@
 
 int	display(t_ml *lx)
 {
-	if (lx->refresh)
+	t_cb		*cub;
+	t_screen	*screen;
+
+	cub = g_cub(ACT_GET);
+	if (cub && lx && lx->refresh)
 	{
+		screen = &cub->screen;
 		raycast_env();
 		hud_render();
 		//buffer_img(get_img("framework"), get_img(g_cub(ACT_GET)->player.weapon->anim_buffer), (t_vec2){lx->width - 640, lx->height - 600});
-		typewritter("\nHold F to\n open [Cost: 4000$]", (t_vec2){0, 300});
-		print_img((t_vec2){0, 0}, "framework");
+		typewritter("\nHold F to\n open [Cost: 4000$]", (t_vec2)
+		{
+			cub->screen.area.a1.x,
+			cub->screen.area.a1.y + 300
+		});
+		draw_safe_area();
+		print_img((t_vec2){screen->x, screen->y}, "framework");
 	}
 	return (1);
 }
 
 
-void move_forward(t_cb *cub)
+void	move_forward(t_cb *cub)
 {
 	t_vec2		v;
 	t_player	*player;
 
 	player = &cub->player;
-	v = (t_vec2){(int)(player->origin.x + player->dir.x * 0.1), (int)player->origin.y};
+	v = (t_vec2){(int)(player->origin.x + (player->dir.x * player->speed)), (int)(player->origin.y)};
 	if (check_move(cub, v) && cub->map_data.map[v.y][v.x] == '0')
-		player->origin.x += player->dir.x * 0.1;
-	v = (t_vec2){(int)(player->origin.x), (int)(player->origin.y + player->dir.y * 0.1)};
+		player->origin.x += player->dir.x * player->speed;		
+	v = (t_vec2){(int)(player->origin.x),
+		(int)(player->origin.y + (player->dir.y * player->speed))};
 	if (check_move(cub, v) && cub->map_data.map[v.y][v.x] == '0')
-		player->origin.y += player->dir.y * 0.1;
+		player->origin.y += player->dir.y * player->speed;
 }
 
 void	move_backward(t_cb *cub)
@@ -45,11 +56,12 @@ void	move_backward(t_cb *cub)
 	t_player	*player;
 
 	player = &cub->player;
-	if (cub->map_data.map[(int)(player->origin.y)][(int)(player->origin.x - player->dir.x * 0.1)] == '0')
-		player->origin.x -= player->dir.x * 0.1;
-	if (cub->map_data.map[(int)(player->origin.y - player->dir.y * 0.1)][(int)(player->origin.x)] == '0')
-		player->origin.y -= player->dir.y * 0.1;
+	if (cub->map_data.map[(int)(player->origin.y)][(int)(player->origin.x - player->dir.x * player->speed)] == '0')
+		player->origin.x -= player->dir.x * player->speed;
+	if (cub->map_data.map[(int)((player->origin.y - player->dir.y * player->speed))][(int)(player->origin.x)] == '0')
+		player->origin.y -= player->dir.y * player->speed;
 }
+
 
 void move_left(t_cb *cub)
 {
@@ -73,12 +85,20 @@ void move_right(t_cb *cub)
     player->plane.y = old_plane_x * sin(0.1) + player->plane.y * cos(0.1);
 }
 
+void	debug_display_player(t_cb *data)
+{
+	printf("\n---- PLAYER\n");
+	printf("Player pos: ");
+	printf("x = %f, y = %f\n", data->player.origin.x, data->player.origin.x);
+	printf("(x = %f, y = %f)\n", data->player.dir.x, data->player.dir.y);
+}
 
 int hook_keyboard(int keycode, t_ml *lx)
 {
 	t_cb	*cub;
 
 	cub = g_cub(ACT_GET);
+	debug_display_player(cub);
 	if (keycode == XK_w) // Flèche haut
 		move_forward(cub);
     else if (keycode == XK_s) // Flèche bas
@@ -95,6 +115,20 @@ int hook_keyboard(int keycode, t_ml *lx)
 		weapon_fired();
 	else if (keycode == XK_b)
 		weapon_reload();
+	else if (keycode == XK_p)
+		cub->player.fov += 1 * (PI / 180);
+	else if (keycode == XK_m)
+		cub->player.fov -= 1 * (PI / 180);
+	else if (keycode == XK_o)
+	{
+		cub->screen.area.u.x += 1;
+		safe_area_update(&cub->screen);
+	}
+	else if (keycode == XK_l)
+	{
+		cub->screen.area.u.x -= 1;
+		safe_area_update(&cub->screen);
+	}
 	else if (keycode == XK_Tab)
 		take_weapon();
 	else if (keycode == XK_q)
@@ -178,21 +212,22 @@ int	main(void)
 	t_cb		*cub;
 
 	lx = gmlx(ACT_INIT);
-	cub = g_cub(ACT_INIT);
-	if (lx && cub)
+	if (lx)
 	{
 		lx->purge_color = 0x7f7f7f;
-		if (lx->set_win_size(1280, 720) && lx->make_window("OpenMLX Showcase"))
+		if (lx->set_win_size(1920, 1080) && lx->make_window("OpenMLX Showcase"))
 		{
-			lx->refresh = 0;
-			//lx->width -= 640;
-			//lx->height -= 360;
-			register_xpm();			
-			mlx_mouse_move(lx->ptr, lx->win, lx->width / 2, lx->height / 2);
-			mlx_hook(lx->win, KeyPress, (1L << 0), hook_keyboard, lx);
-			mlx_hook(lx->win, MotionNotify, PointerMotionMask, mouse_move, cub);
-			mlx_loop_hook(lx->ptr, display, lx);
-			mlx_loop(lx->ptr);
+			cub = g_cub(ACT_INIT);
+			if (cub)
+			{
+				lx->refresh = 0;
+				register_xpm();			
+				mlx_mouse_move(lx->ptr, lx->win, lx->width / 2, lx->height / 2);
+				mlx_hook(lx->win, KeyPress, (1L << 0), hook_keyboard, lx);
+				mlx_hook(lx->win, MotionNotify, PointerMotionMask, mouse_move, cub);
+				mlx_loop_hook(lx->ptr, display, lx);
+				mlx_loop(lx->ptr);
+			}
 			lx->quit_window();
 		}
 	}

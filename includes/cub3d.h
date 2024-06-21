@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 13:27:02 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/21 00:33:28 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,22 @@
 
 # include "openmlx.h"
 # include "cub3d_wpn.h"
+
+typedef struct area_s
+{
+	t_vec2	a1;
+	t_vec2	a2;
+	t_vec2	a3;
+	t_vec2	a4;
+	t_vec2	u;
+}	t_area;
+
+typedef struct screen_s
+{
+	int		x;
+	int		y;
+	t_area	area;
+}	t_screen;
 
 typedef struct ray_s
 {
@@ -58,6 +74,8 @@ typedef struct player_s
 	t_vec2f		dir;
 	t_vec2f		plane;
 	double		vangle;
+	double		fov;
+	double		speed;
 	t_weapon	*weapon;
 }	t_player;
 
@@ -71,6 +89,7 @@ typedef struct map_s
 
 typedef struct cb_s
 {
+	t_screen		screen;
 	t_mm			minimap;
 	t_map			map_data;
 	t_player		player;
@@ -80,6 +99,10 @@ typedef struct cb_s
 //cub struct
 t_cb	*g_cub(int act);
 void	initial_weapons_data(t_cb *cub);
+void	initial_center_screen(t_cb *cub);
+//screen
+void	draw_safe_area(void);
+void	safe_area_update(t_screen *sc);
 //raycasting
 void	raycast_env(void);
 void	ray_get_color(t_ray *ray);

@@ -6,29 +6,33 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:37:53 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 08:50:36 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/20 23:44:26 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/cub3d.h"
 
-static void	health_bar(t_ml *lx, t_cb *cub)
+static void	health_bar(t_cb *cub)
 {
-	t_prim	p;
+	t_prim		p;
+	t_area		*ar;
+	t_player	*x;
 
+	ar = &cub->screen.area;
+	x = &cub->player;
 	p = ml_begin(ML_PRIM_QUADS);
-	ml_vertex(&p, (t_vec2){5, lx->height - 205});
-	ml_vertex(&p, (t_vec2){139, lx->height - 205});
-	ml_vertex(&p, (t_vec2){139, lx->height - 198});
-	ml_vertex(&p, (t_vec2){5, lx->height - 198});
+	ml_vertex(&p, (t_vec2){ar->a1.x, ar->a4.y - 205});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 134, ar->a4.y - 205});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 134, ar->a4.y - 198});
+	ml_vertex(&p, (t_vec2){ar->a1.x, ar->a4.y - 198});
 	ml_color(&p, 0x030303);
 	ml_savemesh(&p, get_img("framework"));
 	ml_end(&p);
 	p = ml_begin(ML_PRIM_QUADS);
-	ml_vertex(&p, (t_vec2){7, lx->height - 203});
-	ml_vertex(&p, (t_vec2){7 + cub->player.health, lx->height - 203});
-	ml_vertex(&p, (t_vec2){7 + cub->player.health, lx->height - 200});
-	ml_vertex(&p, (t_vec2){7, lx->height - 200});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 2, ar->a4.y - 203});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 2 + x->health, ar->a4.y - 203});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 2 + x->health, ar->a4.y - 200});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 2, ar->a4.y - 200});
 	ml_color(&p, 0xFFFFFF);
 	ml_savemesh(&p, get_img("framework"));
 	ml_end(&p);
@@ -84,6 +88,6 @@ void	hud_render(void)
 	{
 		weapon_hud(lx, cub);
 		score_hud(lx);
-		health_bar(lx, cub);
+		health_bar(cub);
 	}
 }
