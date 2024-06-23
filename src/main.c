@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/21 01:54:46 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/21 16:39:38 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	display(t_ml *lx)
 			cub->screen.area.a1.x,
 			cub->screen.area.a1.y + 300
 		});
-		draw_safe_area();
+		//draw_safe_area();
 		print_img((t_vec2){screen->x, screen->y}, "framework");
 	}
 	return (1);
@@ -98,7 +98,7 @@ int hook_keyboard(int keycode, t_ml *lx)
 	t_cb	*cub;
 
 	cub = g_cub(ACT_GET);
-	debug_display_player(cub);
+//	debug_display_player(cub);
 	if (keycode == XK_w) // Flèche haut
 		move_forward(cub);
     else if (keycode == XK_s) // Flèche bas

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 05:57:57 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/16 23:58:39 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/21 16:46:14 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	player_assets(t_cb *cub, t_vec2 v)
 	cub->player.dir = (t_vec2f){-1, 0};
 	cub->player.plane = (t_vec2f){0, 0.66};
 	cub->player.vangle = 0;
-	cub->player.health = 130;
+	cub->player.health = 100;
 	cub->player.score = 500;
 	xalloc((void **)&cub->player.weapon, sizeof(t_weapon), 1);
 	give_weapon("M1911");

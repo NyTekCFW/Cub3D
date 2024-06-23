@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:03:39 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/21 01:58:48 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/21 16:25:15 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,32 +39,22 @@ void	safe_area_update(t_screen *sc)
 	if (sc)
 	{
 		v = (t_vec2){1280 - (sc->x + 20), 720 - (sc->y + 20)};
-		printf("------------\n");
-		sc->area.a1 = (t_vec2)
-		{
-			sc->x + 20 - sc->area.u.x,
-			sc->y + 20 - sc->area.u.y
-		};
-		printf("%i\n", sc->area.a1.x);
+		sc->area.a1 = (t_vec2){20 - sc->area.u.x, 20 - sc->area.u.y};
 		sc->area.a2 = (t_vec2)
 		{
 			sc->x + v.x + sc->area.u.x,
-			sc->y + 20 - sc->area.u.y
+			20 - sc->area.u.y
 		};
-		printf("%i\n", sc->area.a2.x);
 		sc->area.a3 = (t_vec2)
 		{
 			sc->x + v.x + sc->area.u.x,
 			sc->y + v.y + sc->area.u.y
 		};
-		printf("%i\n", sc->area.a3.x);
 		sc->area.a4 = (t_vec2)
 		{
-			sc->x + 20 - sc->area.u.x,
+			20 - sc->area.u.x,
 			sc->y + v.y + sc->area.u.y
 		};
-		printf("%i\n", sc->area.a4.x);
-		printf("/------------/\n");
 	}
 }
 

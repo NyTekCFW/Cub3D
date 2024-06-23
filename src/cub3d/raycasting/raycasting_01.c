@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 11:21:23 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 13:25:16 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/21 17:05:32 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	flashlight(t_shaders *sh, t_ray *ray, t_vec2 v, __uint32_t c)
 	if (lx && sh)
 	{
 		center = (t_vec2f){(sh->img.width / 2) + ray->amp.x,
-				(sh->img.height / 2) + ray->amp.y};
+			(sh->img.height / 2) + ray->amp.y};
 		xdist = dist(center, (t_vec2f){v.x, v.y});
 		if (xdist <= 85.0 + ray->pwall_dist)
 		{
@@ -47,6 +47,11 @@ static void	flashlight(t_shaders *sh, t_ray *ray, t_vec2 v, __uint32_t c)
 				blend_colors(c, 0xffffff, a));
 		}
 	}
+}
+
+__uint32_t	get_shadow(__uint32_t c, double dist)
+{
+	
 }
 
 void	draw_ceiling(int x, t_ray *ray, t_player *p)
@@ -95,6 +100,8 @@ void	draw_walls(int x, t_ray *ray, t_player *p)
 {
 	t_shaders	*sh;
 	int			y;
+	double		d;
+	__uint32_t	c;
 
 	sh = get_img("framework");
 	if (sh)
@@ -102,11 +109,17 @@ void	draw_walls(int x, t_ray *ray, t_player *p)
 		y = ray->draw_start;
 		while (y < ray->draw_end)
 		{
+			d = ray->pwall_dist / 15;
+			if ((ray->pwall_dist / 15) >= 1.0)
+				c = 0x030303;
+			else 
 			set_color(&sh->img, get_px_adr(&sh->img,
 					(t_vec2){x, y}), blend_colors(ray->color,
 					0x030303, ray->pwall_dist / 15));
 			if (p->flashlight == 1)
 				flashlight(sh, ray, (t_vec2){x, y}, ray->color);
+			else
+				
 			y++;
 		}
 	}

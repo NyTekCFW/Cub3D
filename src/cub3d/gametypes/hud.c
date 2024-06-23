@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:37:53 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 23:44:26 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/21 16:59:08 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,45 +20,48 @@ static void	health_bar(t_cb *cub)
 
 	ar = &cub->screen.area;
 	x = &cub->player;
-	p = ml_begin(ML_PRIM_QUADS);
+	p = ml_begin(ML_PRIM_LINE_LOOP);
 	ml_vertex(&p, (t_vec2){ar->a1.x, ar->a4.y - 205});
-	ml_vertex(&p, (t_vec2){ar->a1.x + 134, ar->a4.y - 205});
-	ml_vertex(&p, (t_vec2){ar->a1.x + 134, ar->a4.y - 198});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 142, ar->a4.y - 205});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 142, ar->a4.y - 198});
 	ml_vertex(&p, (t_vec2){ar->a1.x, ar->a4.y - 198});
 	ml_color(&p, 0x030303);
 	ml_savemesh(&p, get_img("framework"));
 	ml_end(&p);
 	p = ml_begin(ML_PRIM_QUADS);
-	ml_vertex(&p, (t_vec2){ar->a1.x + 2, ar->a4.y - 203});
-	ml_vertex(&p, (t_vec2){ar->a1.x + 2 + x->health, ar->a4.y - 203});
-	ml_vertex(&p, (t_vec2){ar->a1.x + 2 + x->health, ar->a4.y - 200});
-	ml_vertex(&p, (t_vec2){ar->a1.x + 2, ar->a4.y - 200});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 1, ar->a4.y - 204});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 10 + x->health, ar->a4.y - 204});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 10 + x->health, ar->a4.y - 199});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 1, ar->a4.y - 199});
 	ml_color(&p, 0xFFFFFF);
 	ml_savemesh(&p, get_img("framework"));
 	ml_end(&p);
 }
 
-static void	score_hud(t_ml *lx)
+static void	score_hud(t_cb *cub)
 {
 	t_prim	p;
+	t_area	*ar;
 
-	p = ml_begin(ML_PRIM_QUADS);
-	ml_vertex(&p, (t_vec2){3, lx->height - 194});
-	ml_vertex(&p, (t_vec2){141, lx->height - 194});
-	ml_vertex(&p, (t_vec2){141, lx->height - 162});
-	ml_vertex(&p, (t_vec2){3, lx->height - 162});
-	ml_color(&p, 0x7F7F7F);
+	p = ml_begin(ML_PRIM_LINE_LOOP);
+	ar = &cub->screen.area;
+	ml_vertex(&p, (t_vec2){ar->a1.x, ar->a4.y - 194});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 142, ar->a4.y - 194});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 142, ar->a4.y - 158});
+	ml_vertex(&p, (t_vec2){ar->a1.x, ar->a4.y - 158});
+	ml_color(&p, 0xFFFFFF);
+	ml_size(&p, 2);
 	ml_savemesh(&p, get_img("framework"));
 	ml_end(&p);
 	p = ml_begin(ML_PRIM_QUADS);
-	ml_vertex(&p, (t_vec2){5, lx->height - 196});
-	ml_vertex(&p, (t_vec2){139, lx->height - 196});
-	ml_vertex(&p, (t_vec2){139, lx->height - 160});
-	ml_vertex(&p, (t_vec2){5, lx->height - 160});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 1, ar->a4.y - 193});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 140, ar->a4.y - 193});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 140, ar->a4.y - 159});
+	ml_vertex(&p, (t_vec2){ar->a1.x + 1, ar->a4.y - 159});
 	ml_color(&p, 0x030303);
 	ml_savemesh(&p, get_img("framework"));
 	ml_end(&p);
-	typewritter("$500999", (t_vec2){0, lx->height - 194});
+	typewritter("$500999", (t_vec2){ar->a1.x + 2, ar->a4.y - 194});
 }
 
 static void	weapon_hud(t_ml *lx, t_cb *cub)
@@ -87,7 +90,7 @@ void	hud_render(void)
 	if (lx && cub)
 	{
 		weapon_hud(lx, cub);
-		score_hud(lx);
+		score_hud(cub);
 		health_bar(cub);
 	}
 }
