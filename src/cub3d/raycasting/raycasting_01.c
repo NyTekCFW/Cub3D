@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 11:21:23 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/21 17:05:32 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/24 20:35:47 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,11 @@ static void	flashlight(t_shaders *sh, t_ray *ray, t_vec2 v, __uint32_t c)
 	}
 }
 
-__uint32_t	get_shadow(__uint32_t c, double dist)
-{
-	
-}
-
 void	draw_ceiling(int x, t_ray *ray, t_player *p)
 {
 	t_shaders	*sh;
 	int			y;
+	__uint32_t	c;
 
 	sh = get_img("framework");
 	if (sh)
@@ -65,9 +61,8 @@ void	draw_ceiling(int x, t_ray *ray, t_player *p)
 		y = ray->draw_start - 1;
 		while (y >= 0)
 		{
-			set_color(&sh->img, get_px_adr(&sh->img,
-					(t_vec2){x, y}), blend_colors(0xb82000, 0x030303,
-					(float)y / (float)ray->draw_end));
+			c = get_shadow(0xb82000, ((float)y / (float)ray->draw_end) * getvar(VAR_SHADOWS));
+			set_color(&sh->img, get_px_adr(&sh->img, (t_vec2){x, y}), c);
 			if (p->flashlight == 1)
 				flashlight(sh, ray, (t_vec2){x, y}, 0xb82000);
 			y--;
@@ -79,6 +74,7 @@ void	draw_floor(int x, t_ray *ray, t_player *p)
 {
 	t_shaders	*sh;
 	int			y;
+	__uint32_t	c;
 
 	sh = get_img("framework");
 	if (sh)
@@ -86,9 +82,8 @@ void	draw_floor(int x, t_ray *ray, t_player *p)
 		y = sh->img.height - 1;
 		while (y >= ray->draw_end)
 		{
-			set_color(&sh->img, get_px_adr(&sh->img,
-					(t_vec2){x, y}), blend_colors(0x00ff00, 0x030303,
-					1 - ((float)y / (float)sh->img.height)));
+			c = get_shadow(0x00ff00, (1 - ((float)y / (float)sh->img.height)) * getvar(VAR_SHADOWS));
+			set_color(&sh->img, get_px_adr(&sh->img, (t_vec2){x, y}), c);
 			if (p->flashlight == 1)
 				flashlight(sh, ray, (t_vec2){x, y}, 0x00ff00);
 			y--;
@@ -100,7 +95,6 @@ void	draw_walls(int x, t_ray *ray, t_player *p)
 {
 	t_shaders	*sh;
 	int			y;
-	double		d;
 	__uint32_t	c;
 
 	sh = get_img("framework");
@@ -109,17 +103,10 @@ void	draw_walls(int x, t_ray *ray, t_player *p)
 		y = ray->draw_start;
 		while (y < ray->draw_end)
 		{
-			d = ray->pwall_dist / 15;
-			if ((ray->pwall_dist / 15) >= 1.0)
-				c = 0x030303;
-			else 
-			set_color(&sh->img, get_px_adr(&sh->img,
-					(t_vec2){x, y}), blend_colors(ray->color,
-					0x030303, ray->pwall_dist / 15));
+			c = get_shadow(ray->color, (ray->pwall_dist / 15) * getvar(VAR_SHADOWS));
+			set_color(&sh->img, get_px_adr(&sh->img, (t_vec2){x, y}), c);
 			if (p->flashlight == 1)
 				flashlight(sh, ray, (t_vec2){x, y}, ray->color);
-			else
-				
 			y++;
 		}
 	}

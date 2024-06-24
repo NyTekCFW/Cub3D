@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/21 16:39:38 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/24 20:45:24 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,33 +35,35 @@ int	display(t_ml *lx)
 	return (1);
 }
 
-
 void	move_forward(t_cb *cub)
 {
 	t_vec2		v;
 	t_player	*player;
+	double		speed;
 
 	player = &cub->player;
-	v = (t_vec2){(int)(player->origin.x + (player->dir.x * player->speed)), (int)(player->origin.y)};
+	speed = getvar(VAR_G_SPEED);
+	v = (t_vec2){(int)(player->origin.x + (player->dir.x * speed)), (int)(player->origin.y)};
 	if (check_move(cub, v) && cub->map_data.map[v.y][v.x] == '0')
-		player->origin.x += player->dir.x * player->speed;		
+		player->origin.x += player->dir.x * speed;		
 	v = (t_vec2){(int)(player->origin.x),
-		(int)(player->origin.y + (player->dir.y * player->speed))};
+		(int)(player->origin.y + (player->dir.y * speed))};
 	if (check_move(cub, v) && cub->map_data.map[v.y][v.x] == '0')
-		player->origin.y += player->dir.y * player->speed;
+		player->origin.y += player->dir.y * speed;
 }
 
 void	move_backward(t_cb *cub)
 {
 	t_player	*player;
+	double		speed;
 
 	player = &cub->player;
-	if (cub->map_data.map[(int)(player->origin.y)][(int)(player->origin.x - player->dir.x * player->speed)] == '0')
-		player->origin.x -= player->dir.x * player->speed;
-	if (cub->map_data.map[(int)((player->origin.y - player->dir.y * player->speed))][(int)(player->origin.x)] == '0')
-		player->origin.y -= player->dir.y * player->speed;
+	speed = getvar(VAR_G_SPEED);
+	if (cub->map_data.map[(int)(player->origin.y)][(int)(player->origin.x - player->dir.x * speed)] == '0')
+		player->origin.x -= player->dir.x * speed;
+	if (cub->map_data.map[(int)((player->origin.y - player->dir.y * speed))][(int)(player->origin.x)] == '0')
+		player->origin.y -= player->dir.y * speed;
 }
-
 
 void move_left(t_cb *cub)
 {
@@ -116,9 +118,9 @@ int hook_keyboard(int keycode, t_ml *lx)
 	else if (keycode == XK_b)
 		weapon_reload();
 	else if (keycode == XK_p)
-		cub->player.fov += 1 * (PI / 180);
+		setdvar(VAR_SHADOWS, getvar(VAR_SHADOWS) + 0.01);//cub->player.fov += 1 * (PI / 180);
 	else if (keycode == XK_m)
-		cub->player.fov -= 1 * (PI / 180);
+		setdvar(VAR_SHADOWS, getvar(VAR_SHADOWS) - 0.01);//cub->player.fov -= 1 * (PI / 180);
 	else if (keycode == XK_o)
 	{
 		cub->screen.area.u.x += 1;
@@ -215,7 +217,7 @@ int	main(void)
 	if (lx)
 	{
 		lx->purge_color = 0x7f7f7f;
-		if (lx->set_win_size(1920, 1080) && lx->make_window("OpenMLX Showcase"))
+		if (lx->set_win_size(1920, 1080) && lx->make_window("Ray of the Dead"))
 		{
 			cub = g_cub(ACT_INIT);
 			if (cub)

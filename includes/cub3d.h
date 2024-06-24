@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/21 00:33:28 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/24 20:36:41 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "openmlx.h"
 # include "cub3d_wpn.h"
+# include "cub3d_dvars.h"
 
 typedef struct area_s
 {
@@ -93,28 +94,31 @@ typedef struct cb_s
 	t_mm			minimap;
 	t_map			map_data;
 	t_player		player;
+	t_dvars			vars[5];
 	t_weapon_data	weapons[2];
 }	t_cb;
 
 //cub struct
-t_cb	*g_cub(int act);
-void	initial_weapons_data(t_cb *cub);
-void	initial_center_screen(t_cb *cub);
+t_cb		*g_cub(int act);
+void		init_dvars(t_cb *cub);
+void		initial_weapons_data(t_cb *cub);
+void		initial_center_screen(t_cb *cub);
 //screen
-void	draw_safe_area(void);
-void	safe_area_update(t_screen *sc);
+void		draw_safe_area(void);
+void		safe_area_update(t_screen *sc);
 //raycasting
-void	raycast_env(void);
-void	ray_get_color(t_ray *ray);
-void	draw_ceiling(int x, t_ray *ray, t_player *p);
-void	draw_floor(int x, t_ray *ray, t_player *p);
-void	draw_walls(int x, t_ray *ray, t_player *p);
-void	flashlight_move(t_vec2 *u);
+void		raycast_env(void);
+void		ray_get_color(t_ray *ray);
+void		draw_ceiling(int x, t_ray *ray, t_player *p);
+void		draw_floor(int x, t_ray *ray, t_player *p);
+void		draw_walls(int x, t_ray *ray, t_player *p);
+void		flashlight_move(t_vec2 *u);
+__uint32_t	get_shadow(__uint32_t c, double dist);
 //map
-void	map_init(t_cb *cub);
+void		map_init(t_cb *cub);
 //
-int		check_move(t_cb *cub, t_vec2 v);
-void	player_settings(t_cb *cub);
+int			check_move(t_cb *cub, t_vec2 v);
+void		player_settings(t_cb *cub);
 //
-void	hud_render(void);
+void		hud_render(void);
 #endif

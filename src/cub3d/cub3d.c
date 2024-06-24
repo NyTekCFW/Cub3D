@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:34:11 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 17:29:32 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/24 20:10:52 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_cb	*g_cub(int act)
 	{
 		initial_center_screen(cub);
 		initial_weapons_data(cub);
+		init_dvars(cub);
 		map_init(cub);
 		player_settings(cub);
 		return (cub);
