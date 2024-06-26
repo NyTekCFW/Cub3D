@@ -6,11 +6,30 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:33:10 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/08 19:29:53 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/25 21:31:03 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/openmlx.h"
+
+static void	lines_input(t_prim *s, t_vec2 data)
+{
+	t_vec4	v;
+
+	if (ml_can_draw(s, data))
+	{
+		if (s->savemesh)
+		{
+			v = (t_vec4){0, data.x, 0, data.y};
+			if (!s->overwrite)
+				ml_overwrite_fix(s, &v);
+			set_color(s->savemesh, get_px_adr(s->savemesh,
+					(t_vec2){v.y, v.w}), s->color);
+		}
+		else
+			ml_put_pixel(data.x, data.y, s->color);
+	}
+}
 
 void	ml_draw_points(t_prim *s)
 {
@@ -27,43 +46,33 @@ void	ml_draw_points(t_prim *s)
 		p.x = m[0].x;
 		while (p.x < m[1].x)
 		{
-			if (ml_can_draw(s, p))
-			{
-				if (s->savemesh)
-					set_color(s->savemesh,
-						get_px_adr(s->savemesh, p), s->color);
-				else
-					ml_put_pixel(p.x, p.y, s->color);
-			}
+			if (s->savemesh)
+				lines_input(s, p);
+			else if (ml_can_draw(s, p))
+				ml_put_pixel(p.x, p.y, s->color);
 			p.x++;
 		}
 		p.y++;
 	}
 }
 
-static void	lines_input(t_prim *s, t_vec2 data)
-{
-	if (ml_can_draw(s, data))
-	{
-		if (s->savemesh)
-			set_color(s->savemesh, get_px_adr(s->savemesh, data), s->color);
-		else
-			ml_put_pixel(data.x, data.y, s->color);
-	}
-}
-
 static void	lines_render(t_prim *s, double imz[], t_vec2 p[], double d[])
 {
 	t_vec2	data;
+	double	per[2];
+	double	length;
 
+	length = sqrt(d[0] * d[0] + d[1] * d[1]);
+	per[0] = -d[1] / length;
+	per[1] = d[0] / length;
 	imz[2] = 0;
 	while (imz[2] < imz[1])
 	{
-		data = (t_vec2){((p[0].x + imz[2]) + imz[0] * d[0]),
-			((p[0].y + imz[2]) + imz[0] * d[1])};
+		data = (t_vec2){(p[0].x + imz[0] * d[0] + imz[2] * per[0]),
+			(p[0].y + imz[0] * d[1] + imz[2] * per[1])};
 		lines_input(s, data);
-		data = (t_vec2){((p[0].x - imz[2]) + imz[0] * d[0]),
-			((p[0].y - imz[2]) + imz[0] * d[1])};
+		data = (t_vec2){(p[0].x + imz[0] * d[0] - imz[2] * per[0]),
+			(p[0].y + imz[0] * d[1] - imz[2] * per[1])};
 		lines_input(s, data);
 		imz[2] += 0.01;
 	}

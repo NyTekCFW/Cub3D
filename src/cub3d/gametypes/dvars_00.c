@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 18:47:09 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/24 20:34:58 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/25 19:18:09 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static void	fix_value(double *v, t_vec2f *m)
 {
-	double tmp;
+	double	tmp;
 
-	if ((__int64_t)*v > 2147483647)
+	if ((__int64_t)(*v) > 2147483647)
 		*v = (double)2147483647;
-	else if ((__int64_t)*v < -2147483648)
+	else if ((__int64_t)(*v) < -2147483648)
 		*v = (double)-2147483648;
 	if ((__int64_t)m->x > 2147483647)
 		m->x = (double)2147483647;
@@ -36,12 +36,11 @@ static void	fix_value(double *v, t_vec2f *m)
 	}
 }
 
-t_dvars	reg_var(char t, int id, double dval, t_vec2f m)
+t_dvars	reg_var(int id, double dval, t_vec2f m)
 {
 	t_dvars	var;
 
 	fix_value(&dval, &m);
-	var.type = t;
 	var.id = id;
 	var.dvalue = dval;
 	var.ivalue = (int)dval;

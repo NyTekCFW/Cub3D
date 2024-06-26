@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:23:13 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/07 18:04:41 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/25 19:58:59 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct prim_s
 	int			uv;
 	int			wrapping;
 	int			texture;
+	int			overwrite;
 	t_img		*img;
 	t_img		*savemesh;
 	float		intensity;
@@ -35,6 +36,8 @@ void	ml_size(t_prim *s, __uint32_t size);
 void	ml_setmode(t_prim *s, int mode);
 void	ml_settexture(t_prim *s, char *name);
 void	ml_setintensity(t_prim *s, float i);
+void	ml_overwrite(t_prim *s, int overwrite);
+void	ml_overwrite_fix(t_prim *s, t_vec4 *ijt);
 void	ml_setuv(t_prim *s, int uv);
 void	ml_setwrap(t_prim *s, int wrap);
 void	ml_savemesh(t_prim *s, t_shaders *sh);

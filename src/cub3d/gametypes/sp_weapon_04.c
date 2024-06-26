@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 19:15:20 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 08:47:00 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/25 16:21:49 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static void	walk_loop_anim(t_cb *cub, t_weapon *wpn, t_vec2 *v, size_t len)
 			wpn->anim_buffer[len - 1] = '0';
 		}
 	}
-	usleep(8000);
 }
 
 void	run_weapon_anim(void)

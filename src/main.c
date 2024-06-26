@@ -6,11 +6,13 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/24 20:45:24 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/26 02:26:24 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
+
+clock_t	timer = 0;
 
 int	display(t_ml *lx)
 {
@@ -20,17 +22,25 @@ int	display(t_ml *lx)
 	cub = g_cub(ACT_GET);
 	if (cub && lx && lx->refresh)
 	{
+		while (clock() < timer)
+			;
 		screen = &cub->screen;
 		raycast_env();
 		hud_render();
-		//buffer_img(get_img("framework"), get_img(g_cub(ACT_GET)->player.weapon->anim_buffer), (t_vec2){lx->width - 640, lx->height - 600});
+		run_weapon_anim();
+		merge_img(get_img("framework"), get_img(g_cub(ACT_GET)->player.weapon->anim_buffer), (t_vec2){(screen->x + 300 + get_move_render()->x) * getvar(VAR_GUN_X),((screen->y - 35) + get_move_render()->y) * getvar(VAR_GUN_Y)});
 		typewritter("\nHold F to\n open [Cost: 4000$]", (t_vec2)
 		{
 			cub->screen.area.a1.x,
 			cub->screen.area.a1.y + 300
 		});
-		//draw_safe_area();
-		print_img((t_vec2){screen->x, screen->y}, "framework");
+		draw_safe_area();
+		print_img((t_vec2){screen->x, screen->y}, "/framework.bin");
+		timer = clock() + getvarint(VAR_FPS);
+		cub->player.velocity -= 0.1;
+		if (cub->player.velocity < 0)
+			cub->player.velocity = 0;
+		//export_img("framework");
 	}
 	return (1);
 }
@@ -118,17 +128,17 @@ int hook_keyboard(int keycode, t_ml *lx)
 	else if (keycode == XK_b)
 		weapon_reload();
 	else if (keycode == XK_p)
-		setdvar(VAR_SHADOWS, getvar(VAR_SHADOWS) + 0.01);//cub->player.fov += 1 * (PI / 180);
+		setdvar(VAR_ASPECT, getvar(VAR_ASPECT) + 0.1);
 	else if (keycode == XK_m)
-		setdvar(VAR_SHADOWS, getvar(VAR_SHADOWS) - 0.01);//cub->player.fov -= 1 * (PI / 180);
+		setdvar(VAR_ASPECT, getvar(VAR_ASPECT) - 0.1);
 	else if (keycode == XK_o)
 	{
-		cub->screen.area.u.x += 1;
+		cub->screen.area.u.y += 1;
 		safe_area_update(&cub->screen);
 	}
 	else if (keycode == XK_l)
 	{
-		cub->screen.area.u.x -= 1;
+		cub->screen.area.u.y -= 1;
 		safe_area_update(&cub->screen);
 	}
 	else if (keycode == XK_Tab)
@@ -136,6 +146,9 @@ int hook_keyboard(int keycode, t_ml *lx)
 	else if (keycode == XK_q)
 		cub->player.flashlight = !cub->player.flashlight;
 	lx->refresh = 1;
+	cub->player.velocity += 0.1;
+	if (cub->player.velocity > 1.0f)
+		cub->player.velocity = 1.0f;
 	return (1);
 }
 
@@ -189,7 +202,10 @@ void	register_xpm(void)
 	lx = gmlx(ACT_GET);
 	if (lx && cub)
 	{
+		load_exported("./export/framework.bin");
 		//basic
+		register_img("./textures/huds/dpad.xpm");
+		register_img("./textures/huds/dpad_bar.xpm");
 		register_img("./textures/brick_argb.xpm");
 		register_img("./textures/ground.xpm");
 		register_img("./textures/rock.xpm");
@@ -216,7 +232,7 @@ int	main(void)
 	lx = gmlx(ACT_INIT);
 	if (lx)
 	{
-		lx->purge_color = 0x7f7f7f;
+		lx->purge_color = 0x030303;
 		if (lx->set_win_size(1920, 1080) && lx->make_window("Ray of the Dead"))
 		{
 			cub = g_cub(ACT_INIT);
@@ -225,6 +241,7 @@ int	main(void)
 				lx->refresh = 0;
 				register_xpm();			
 				mlx_mouse_move(lx->ptr, lx->win, lx->width / 2, lx->height / 2);
+				mlx_mouse_hide(lx->ptr, lx->win);
 				mlx_hook(lx->win, KeyPress, (1L << 0), hook_keyboard, lx);
 				mlx_hook(lx->win, MotionNotify, PointerMotionMask, mouse_move, cub);
 				mlx_loop_hook(lx->ptr, display, lx);

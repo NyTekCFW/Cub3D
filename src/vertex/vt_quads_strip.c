@@ -6,11 +6,27 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 19:45:18 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/07 18:07:21 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/25 23:03:12 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/openmlx.h"
+
+static void	ml_quad_settings(t_prim *d, t_prim *b)
+{
+	ml_color(d, b->color);
+	ml_setmode(d, b->mode);
+	ml_size(d, b->size);
+	d->savemesh = b->savemesh;
+	if (b->texture != ML_TEXTURE_NONE)
+	{
+		d->texture = b->texture;
+		d->img = b->img;
+		d->color_texture = b->color_texture;
+		d->intensity = b->intensity;
+		d->overwrite = b->overwrite;
+	}
+}
 
 void	ml_draw_quad_strip(t_prim *s)
 {
@@ -28,14 +44,7 @@ void	ml_draw_quad_strip(t_prim *s)
 		ml_color(&quad, s->color);
 		ml_setmode(&quad, s->mode);
 		ml_size(&quad, s->size);
-		quad.savemesh = s->savemesh;
-		if (s->texture != ML_TEXTURE_NONE)
-		{
-			quad.texture = s->texture;
-			quad.img = s->img;
-			quad.color_texture = s->color_texture;
-			quad.intensity = s->intensity;
-		}
+		ml_quad_settings(&quad, s);
 		ml_end(&quad);
 		i += 2;
 	}

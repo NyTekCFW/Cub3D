@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 06:08:03 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/19 17:17:26 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/26 02:25:16 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,6 @@ int			split_image(char *name, char *output, int width, int i);
 void		typewritter(char *str, t_vec2 v);
 int			r_textheight(char *str);
 int			r_textwidth(char *str);
+void		export_img(char *name);
+void		load_exported(char *name);
 #endif

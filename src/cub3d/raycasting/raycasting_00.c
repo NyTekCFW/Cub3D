@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 11:03:57 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/24 18:40:44 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/26 00:39:38 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,18 @@ static void	ray_line(t_ray *ray, t_cb *cub)
 		ray->pwall_dist = (ray->side_dist.y - ray->delta_dist.y);
 	ray->line_height = (int)(720 / ray->pwall_dist);
 	ray->draw_start = (-ray->line_height / 2) + 360
-		+ (360 * tan(cub->player.vangle));
+		+ (360 * tanf(cub->player.vangle));
 	if (ray->draw_start < 0)
 		ray->draw_start = 0;
 	ray->draw_end = (ray->line_height / 2) + 360
-		+ (360 * tan(cub->player.vangle));
+		+ (360 * tanf(cub->player.vangle));
 	if (ray->draw_end >= 720)
 		ray->draw_end = 719;
 	if (ray->side == 0)
 		ray->wall_x = cub->player.origin.y + ray->pwall_dist * ray->dir.y;
 	else
 		ray->wall_x = cub->player.origin.x + ray->pwall_dist * ray->dir.x;
-	ray->wall_x -= floor(ray->wall_x);
+	ray->wall_x -= floorf(ray->wall_x);
 }
 
 static void	ray_dda_hit(t_ray *ray, t_cb *cub)
@@ -92,7 +92,8 @@ static void	init_ray(t_ray *ray, t_cb *cub, int x)
 	t_player	*player;
 
 	player = &cub->player;
-	ray->camera = ((2 * x) / (double)1280 - 1) * (tan(player->fov / 2) * (double)(1280.0 / 720.0));
+	ray->camera = ((2 * x) / (float)1280 - 1)
+		* (tanf(getvar(VAR_ASPECT) / 2) * 1.7777777910232544);
 	ray->dir.x = player->dir.x + player->plane.x * ray->camera;
 	ray->dir.y = player->dir.y + player->plane.y * ray->camera;
 	ray->map = (t_vec2){(int)player->origin.x, (int)player->origin.y};
@@ -113,7 +114,6 @@ static void	init_ray(t_ray *ray, t_cb *cub, int x)
 /// @brief using raycasting to build the environnement based on player view 
 void	raycast_env(void)
 {
-	static t_vec2	amp = {0, 0};
 	t_ray			ray;
 	t_cb			*cub;
 	t_ml			*lx;
@@ -122,11 +122,11 @@ void	raycast_env(void)
 	lx = gmlx(ACT_GET);
 	cub = g_cub(ACT_GET);
 	x = 0;
-	flashlight_move(&amp);
+	flashlight_move(get_move_render());
 	xmemset(&ray, 0, sizeof(t_ray));
 	if (lx && cub)
 	{
-		ray.amp = amp;
+		ray.amp = *get_move_render();
 		fill_img_color(&get_img("framework")->img, 0);
 		while (x < 1280)
 		{

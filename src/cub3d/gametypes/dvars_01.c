@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:06:16 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/24 20:38:03 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/26 00:40:26 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	setdvarint(int id, int v)
 		var = &cb->vars[id];
 		if (var)
 		{
+			printf("%i %i %i\n", v, var->ilimit.x, var->ilimit.y);
 			if (v >= var->ilimit.x && v <= var->ilimit.y)
 			{
 				var->dvalue = (double)v;
@@ -51,10 +52,21 @@ void	init_dvars(t_cb *cub)
 {
 	if (cub)
 	{
-		cub->vars[VAR_G_SPEED] = reg_var('f', VAR_G_SPEED, 0.1, (t_vec2f){0.05f, 0.6f});
-		cub->vars[VAR_G_GRAVITY] = reg_var('f', VAR_G_GRAVITY, 1.0, (t_vec2f){0.3f, 2.0f});
-		cub->vars[VAR_SHADOWS] = reg_var('f', VAR_SHADOWS, 1.0, (t_vec2f){0.05f, 2.0f});
-		cub->vars[VAR_TIMESCALE] = reg_var('f', VAR_TIMESCALE, 1.0, (t_vec2f){0.05f, 2.0f});
-		cub->vars[VAR_FLASHLIGHT_RADIUS] = reg_var('f', VAR_FLASHLIGHT_RADIUS, 85.0, (t_vec2f){15.0f, 135.0f});
+		cub->vars[VAR_G_SPEED]
+			= reg_var(VAR_G_SPEED, 0.1, (t_vec2f){0.05f, 0.6f});
+		cub->vars[VAR_G_GRAVITY]
+			= reg_var(VAR_G_GRAVITY, 1.0, (t_vec2f){0.3f, 2.0f});
+		cub->vars[VAR_SHADOWS]
+			= reg_var(VAR_SHADOWS, 1.0, (t_vec2f){0.05f, 2.0f});
+		cub->vars[VAR_FLASHLIGHT_RADIUS]
+			= reg_var(VAR_FLASHLIGHT_RADIUS, 85.0, (t_vec2f){60.0f, 100.0f});
+		cub->vars[VAR_GUN_X]
+			= reg_var(VAR_GUN_X, 1.0, (t_vec2f){0.90f, 1.10f});
+		cub->vars[VAR_GUN_Y]
+			= reg_var(VAR_GUN_Y, 1.0, (t_vec2f){0.88f, 1.60f});
+		cub->vars[VAR_FPS]
+			= reg_var(VAR_FPS, 6944.0, (t_vec2f){33333.0f, 5714.0f});
+		cub->vars[VAR_ASPECT]
+			= reg_var(VAR_ASPECT, 1.13f, (t_vec2f){0.60f, 1.85f});
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 11:23:01 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/07 18:06:20 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/25 19:58:44 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,12 @@ static void	ml_draw_poly_rendering(t_prim *s, int xinter[], t_vec4 *ijt)
 		if (ml_can_draw(s, (t_vec2){ijt->y, ijt->w}))
 		{
 			if (s->savemesh)
+			{
+				if (!s->overwrite)
+					ml_overwrite_fix(s, ijt);
 				set_color(s->savemesh, get_px_adr(s->savemesh,
 						(t_vec2){ijt->y, ijt->w}), s->color);
+			}
 			else
 				ml_put_pixel(ijt->y, ijt->w, s->color);
 		}

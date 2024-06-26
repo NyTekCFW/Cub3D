@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:54 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 13:19:59 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/25 16:28:03 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,6 @@ void	take_weapon(void);
 void	give_max_ammo(void);
 void	give_weapon(char *name);
 void	get_weapon_info(void);
+void	run_weapon_anim(void);
+t_vec2	*get_move_render(void);
 #endif

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/24 20:36:41 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/26 00:33:33 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct ray_s
 	int		color;
 	double	camera;
 	double	pwall_dist;
-	double	wall_x;
+	float	wall_x;
 	t_vec2f	dir;
 	t_vec2f	side_dist;
 	t_vec2f	delta_dist;
@@ -77,6 +77,7 @@ typedef struct player_s
 	double		vangle;
 	double		fov;
 	double		speed;
+	float		velocity;
 	t_weapon	*weapon;
 }	t_player;
 
@@ -94,7 +95,7 @@ typedef struct cb_s
 	t_mm			minimap;
 	t_map			map_data;
 	t_player		player;
-	t_dvars			vars[5];
+	t_dvars			vars[8];
 	t_weapon_data	weapons[2];
 }	t_cb;
 
@@ -121,4 +122,5 @@ int			check_move(t_cb *cub, t_vec2 v);
 void		player_settings(t_cb *cub);
 //
 void		hud_render(void);
+void		crosshair_hud(t_cb *cub);
 #endif
