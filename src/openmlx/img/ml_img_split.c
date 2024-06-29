@@ -6,12 +6,17 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:14:13 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/19 15:15:55 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 17:40:39 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/openmlx.h"
 
+/// @brief update the buffer name id
+///e.g : monospace_ttf_000 -> monospace_ttf_001
+/// @param buffer e.g: monospace_ttf_
+/// @param len len of the buffer
+/// @param i current id
 static void	update_splitted_name(char *buffer, size_t len, int i)
 {
 	buffer[len] = 0x30 + (i / 100);
@@ -20,7 +25,13 @@ static void	update_splitted_name(char *buffer, size_t len, int i)
 	buffer[len + 3] = 0;
 }
 
-static void	split(t_shaders **imgx, t_vec3 wh, int i)
+/// @brief split the image
+/// @param imgx image array [2] that contain
+///the image source and destination
+/// @param wh wh.x = position where
+///the image will be splitted and .y = height of the image
+/// @param i current id
+static void	split(t_shaders **imgx, t_vec2 wh, int i)
 {
 	t_vec4		ifr;
 	t_vec2		adr;
@@ -47,6 +58,16 @@ static void	split(t_shaders **imgx, t_vec3 wh, int i)
 	}
 }
 
+/// @brief 
+/// @param name name of the shaders e.g :
+/// /monospace_ttf.xpm
+/// @param output base name of output splitted image
+/// e.g: mm_ -> mm_000 -> mm_001 ...
+/// @param width width of 1 image
+/// @param i continue a list of splitted image
+/// e.g: int a = split_image("/p1.xpm", "b", 2, 0);
+/// a = split_image("/p2.xpm", "b", 2, a);
+/// @return total of image splitted (last id)
 int	split_image(char *name, char *output, int width, int i)
 {
 	t_shaders	*imgx[2];
@@ -67,7 +88,7 @@ int	split_image(char *name, char *output, int width, int i)
 					NULL, buffer);
 				imgx[1] = get_img(buffer);
 				if (imgx[1])
-					split(imgx, (t_vec3){width, imgx[0]->img.height, 0}, u);
+					split(imgx, (t_vec2){width, imgx[0]->img.height}, u);
 				u++;
 			}
 		}

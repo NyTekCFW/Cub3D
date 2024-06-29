@@ -6,18 +6,23 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 08:25:08 by lchiva            #+#    #+#             */
-/*   Updated: 2024/05/31 15:09:32 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/29 00:51:00 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/openmlx.h"
 
+/// @brief destroy a shader struct
+/// @param lx obtained via gmlx
+/// @param prev previous shader on the list
+/// @param list list that contain all shaders
+/// @return 
 static int	purge_shader(t_ml *lx, t_shaders *prev, t_shaders *list)
 {
 	mlx_destroy_image(lx->ptr, list->img.ptr);
 	if (lx->texture.shaders_count > 0)
 		lx->texture.shaders_count -= 1;
-	if (prev->next)
+	if (prev && prev->next)
 	{
 		xfree((void **)&prev->next);
 		return (1);
@@ -25,6 +30,8 @@ static int	purge_shader(t_ml *lx, t_shaders *prev, t_shaders *list)
 	return (0);
 }
 
+/// @brief purges all shaders registered
+/// @param  
 void	purge_textures(void)
 {
 	t_ml		*lx;
@@ -35,6 +42,7 @@ void	purge_textures(void)
 	if (lx)
 	{
 		list = &lx->texture.shaders;
+		prev = list;
 		while (list)
 		{
 			while (list->next)
@@ -50,6 +58,9 @@ void	purge_textures(void)
 	}
 }
 
+/// @brief print a image into the window
+/// @param pos position
+/// @param name name of the shader
 void	print_img(t_vec2 pos, char *name)
 {
 	t_ml		*lx;
@@ -69,6 +80,9 @@ void	print_img(t_vec2 pos, char *name)
 	}
 }
 
+/// @brief return a shader struct obtained via a name
+/// @param name name of the shader
+/// @return 
 t_shaders	*get_img(char *name)
 {
 	t_ml		*lx;

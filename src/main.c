@@ -6,27 +6,31 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/26 02:26:24 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 22:18:35 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
+//SIMD Memory Optimization (SMO) 
+
 clock_t	timer = 0;
 
+//int o = 0;
 int	display(t_ml *lx)
 {
 	t_cb		*cub;
 	t_screen	*screen;
+	static clock_t		ck = 1000000;
 
 	cub = g_cub(ACT_GET);
 	if (cub && lx && lx->refresh)
 	{
 		while (clock() < timer)
 			;
+		clock_t dd = clock();
 		screen = &cub->screen;
 		raycast_env();
-		hud_render();
 		run_weapon_anim();
 		merge_img(get_img("framework"), get_img(g_cub(ACT_GET)->player.weapon->anim_buffer), (t_vec2){(screen->x + 300 + get_move_render()->x) * getvar(VAR_GUN_X),((screen->y - 35) + get_move_render()->y) * getvar(VAR_GUN_Y)});
 		typewritter("\nHold F to\n open [Cost: 4000$]", (t_vec2)
@@ -34,10 +38,26 @@ int	display(t_ml *lx)
 			cub->screen.area.a1.x,
 			cub->screen.area.a1.y + 300
 		});
+		
+		
+		hud_render();
 		draw_safe_area();
-		print_img((t_vec2){screen->x, screen->y}, "/framework.bin");
+		
+		if (lx->record.status)
+			save_record();
+		if (lx->video.status)
+			display_video((t_vec2){screen->x, screen->y});
+	//	load_video("./export/video.bin\0");
+		print_img((t_vec2){screen->x, screen->y}, "framework");
+		clock_t cc = clock();
+		if (cc - dd < ck)
+			ck = cc - dd, printf("min : %li\n",ck);
+		printf("%li\n",clock() -  dd);
+		//o++;
+		//if (o == 10)
+		//	exit(1);
 		timer = clock() + getvarint(VAR_FPS);
-		cub->player.velocity -= 0.1;
+		cub->player.velocity -= 0.2;
 		if (cub->player.velocity < 0)
 			cub->player.velocity = 0;
 		//export_img("framework");
@@ -128,9 +148,9 @@ int hook_keyboard(int keycode, t_ml *lx)
 	else if (keycode == XK_b)
 		weapon_reload();
 	else if (keycode == XK_p)
-		setdvar(VAR_ASPECT, getvar(VAR_ASPECT) + 0.1);
+		start_video("./export/video.bin\0", 0.1);//setdvar(VAR_ASPECT, getvar(VAR_ASPECT) + 0.1);
 	else if (keycode == XK_m)
-		setdvar(VAR_ASPECT, getvar(VAR_ASPECT) - 0.1);
+		stop_record();//setdvar(VAR_ASPECT, getvar(VAR_ASPECT) - 0.1);
 	else if (keycode == XK_o)
 	{
 		cub->screen.area.u.y += 1;
@@ -146,9 +166,9 @@ int hook_keyboard(int keycode, t_ml *lx)
 	else if (keycode == XK_q)
 		cub->player.flashlight = !cub->player.flashlight;
 	lx->refresh = 1;
-	cub->player.velocity += 0.1;
-	if (cub->player.velocity > 1.0f)
-		cub->player.velocity = 1.0f;
+	cub->player.velocity += 0.2;
+	if (cub->player.velocity > 1.6f)
+		cub->player.velocity = 1.6f;
 	return (1);
 }
 
@@ -178,8 +198,8 @@ int	mouse_move(int x, int y, t_cb *cub)
 				= player->plane.x * cos(-d[1]) - player->plane.y * sin(-d[1]);
 			player->plane.y = d[3] * sin(-d[1]) + player->plane.y * cos(-d[1]);
 			player->vangle -= delta.y * d[0];
-			if (player->vangle > 1.5)
-				player->vangle = 1.5;
+			if (player->vangle > 0.8)
+				player->vangle = 0.8;
 			if (player->vangle < -0.8)
 				player->vangle = -0.8;
 			last = (t_vec2){lx->width / 2, lx->height / 2};
@@ -206,6 +226,7 @@ void	register_xpm(void)
 		//basic
 		register_img("./textures/huds/dpad.xpm");
 		register_img("./textures/huds/dpad_bar.xpm");
+		register_img("./textures/huds/hud_score.xpm");
 		register_img("./textures/brick_argb.xpm");
 		register_img("./textures/ground.xpm");
 		register_img("./textures/rock.xpm");
@@ -214,8 +235,10 @@ void	register_xpm(void)
 		register_img("./textures/fonts/monospace_ttf.xpm");
 		split_image("/monospace_ttf.xpm", "monospace_", 32, 0);
 		//render
-		create_img((t_ui){0, 0, lx->width, lx->height, 0},
+		create_img((t_ui){0, 0, 1280, 720, 0},
 			fill_img_color, "framework");
+		create_img((t_ui){0, 0, 1280, 720, 0},
+			fill_img_color, "framework_rev");
 		//weapon
 		register_img("./textures/weapon/M1911_idle_walk.xpm");
 		i = split_image("/M1911_idle_walk.xpm", "M1911_walk_", 640, 0);

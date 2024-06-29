@@ -6,29 +6,16 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 15:11:10 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/02 12:52:30 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 17:25:20 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/openmlx.h"
 
-static void	fill_image(t_img *d, t_img *b, __uint32_t size)
-{
-	__uint32_t	i;
-	__uint32_t	color;
-
-	if (!d || !b)
-		return ;
-	i = 0;
-	while (i < size)
-	{
-		color = get_value(b->addr + i);
-		if (is_valid_color(color))
-			set_value(d->addr + i, color);
-		i += 4;
-	}
-}
-
+/// @brief check if background and foreground color is valid
+/// @param bkg color of the current pixel of the background
+/// @param frg color of the current pixel of the foreground
+/// @return 
 static int	is_valid_blender(__uint32_t bkg, __uint32_t frg)
 {
 	if (frg == 0 || frg == 0xFF000000)
@@ -43,6 +30,11 @@ static int	is_valid_blender(__uint32_t bkg, __uint32_t frg)
 	return (1);
 }
 
+/// @brief 
+/// @param bkg color of the current pixel of the background
+/// @param frg color of the current pixel of the foreground
+/// @param alpha alpha of the foreground image
+/// @return 
 __uint32_t	blend_colors(__uint32_t bkg, __uint32_t frg, float alpha)
 {
 	t_vec3		color_bkg;
@@ -66,9 +58,14 @@ __uint32_t	blend_colors(__uint32_t bkg, __uint32_t frg, float alpha)
 	return (res);
 }
 
+/// @brief make a overlay between 2 image
+///of the same size and export it on a other
+/// @param d dest image the result will be stock on it
+/// @param b background image
+/// @param f foreground image
+/// @param a alpha of the foreground
 void	overlay_images(t_img *d, t_img *b, t_img *f, float a)
 {
-	__uint32_t	size;
 	__uint32_t	i;
 	__uint32_t	color;
 
@@ -78,9 +75,8 @@ void	overlay_images(t_img *d, t_img *b, t_img *f, float a)
 	if (d->width != b->width || d->width != f->width
 		|| d->height != b->height || d->height != f->height)
 		return ;
-	size = d->height * d->len + d->width * (d->bpp / 8);
-	fill_image(d, b, size);
-	while (i < size)
+	merge_img_overlay(d, b, (t_vec2){0, 0});
+	while (i < d->size)
 	{
 		color = blend_colors(get_value(b->addr + i),
 				get_value(f->addr + i), a);

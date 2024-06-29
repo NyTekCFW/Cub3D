@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 09:19:11 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/01 11:49:54 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/29 03:36:42 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 char	*xstrcpy(char *buffer, const char *src)
 {
-	int	i;
+	size_t	i;
 
-	i = 0;
+	i = 0;//xstrlen(src);
+	//smo_copy(buffer, src, i + 1);
 	while (src[i])
 	{
 		buffer[i] = src[i];
@@ -24,4 +25,13 @@ char	*xstrcpy(char *buffer, const char *src)
 	}
 	buffer[i] = '\0';
 	return (buffer);
+}
+
+void	xwrite(int fd, const void *data, size_t n)
+{
+	ssize_t	p;
+
+	p = write(fd, data, n);
+	if (p != (long)n)
+		p = write(STDERR_FILENO, "write error\n", 12);
 }

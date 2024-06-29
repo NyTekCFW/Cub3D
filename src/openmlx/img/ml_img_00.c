@@ -6,60 +6,76 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 08:34:10 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/19 15:16:46 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 20:19:34 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/openmlx.h"
 
-static t_vec3	rgba_to_rgb(__uint32_t clr)
-{
-	return ((t_vec3){clr & 0xFF, (clr >> 8) & 0xFF, (clr >> 16) & 0xFF});
-}
-
+/// @brief insert a color at a image adr
+/// @param img image
+/// @param adr can be obtained by using get_px_addr(img, xy)
+/// @param clr color to set at the adr
 void	set_color(t_img *img, int adr, __uint32_t clr)
 {
-	t_vec3	rgb;
-
-	rgb = rgba_to_rgb(clr);
-	img->addr[adr] = rgb.x;
-	img->addr[adr + 1] = rgb.y;
-	img->addr[adr + 2] = rgb.z;
+	*(__uint32_t *)(img->addr + adr) = (clr & 0x00FFFFFF);
 }
 
+/// @brief get pixel adr of img at xy position
+/// @param img image
+/// @param xy position
+/// @return 
 __uint32_t	get_px_adr(t_img *img, t_vec2 xy)
 {
-	t_vec2	u;
+	int	x;
+	int	y;
 
-	u = (t_vec2){xy.x % img->width, xy.y % img->height};
-	return (u.y * img->len + u.x * (img->bpp / 8));
+	x = xy.x % img->width;
+	y = xy.y % img->height;
+	return (y * img->len + x * 4);
 }
 
+/// @brief get color of pixel at xy position
+/// @param img image
+/// @param xy position
+/// @return 
 __uint32_t	get_px_color(t_img *img, t_vec2 xy)
 {
 	__uint32_t	pick;
 	__uint32_t	adr;
 
 	adr = get_px_adr(img, xy);
-	pick = img->addr[adr + 2] << 16;
-	pick += img->addr[adr + 1] << 8;
-	pick += img->addr[adr];
+	pick = *(__uint32_t *)(img->addr + adr) & 0x00FFFFFF;
 	return (pick);
 }
 
+/// @brief fill a image with a specified color
+/// @param dest dest image
+/// @param color specified color 
 void	fill_img_color(t_img *dest, __uint32_t color)
 {
-	__uint32_t	size;
 	__uint32_t	i;
+	__uint32_t	n;
+	void		*adr;
 
 	i = 0;
 	if (!dest)
 		return ;
-	size = dest->height * dest->len
-		+ dest->width * (dest->bpp / 8);
-	while (i < size)
+	adr = (void *)dest->addr;
+	n = dest->size;
+	while (i < n)
 	{
-		set_color(dest, i, color);
-		i += 4;
+		if ((i + __SIZEOF_LONG__) < n)
+		{
+			*(__uint64_t *)(adr + i) = (__uint64_t)color << 32 | color;
+			i += __SIZEOF_LONG__;
+		}
+		else if ((i + __SIZEOF_INT__) < n)
+		{
+			*(__uint32_t *)(adr + i) = color;
+			i += __SIZEOF_INT__;
+		}
+		else
+			i += __SIZEOF_INT__;
 	}
 }

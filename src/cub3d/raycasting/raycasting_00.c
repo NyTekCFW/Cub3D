@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 11:03:57 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/26 00:39:38 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 23:56:16 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static void	init_ray(t_ray *ray, t_cb *cub, int x)
 
 	player = &cub->player;
 	ray->camera = ((2 * x) / (float)1280 - 1)
-		* (tanf(getvar(VAR_ASPECT) / 2) * 1.7777777910232544);
+		* (tanf(getvar(VAR_ASPECT) / 2) * 1.777777778);
 	ray->dir.x = player->dir.x + player->plane.x * ray->camera;
 	ray->dir.y = player->dir.y + player->plane.y * ray->camera;
 	ray->map = (t_vec2){(int)player->origin.x, (int)player->origin.y};
@@ -114,24 +114,26 @@ static void	init_ray(t_ray *ray, t_cb *cub, int x)
 /// @brief using raycasting to build the environnement based on player view 
 void	raycast_env(void)
 {
-	t_ray			ray;
-	t_cb			*cub;
-	t_ml			*lx;
-	int				x;
+	t_ray		ray;
+	t_cb		*cub;
+	int			x;
+	t_shaders	*sh;
 
-	lx = gmlx(ACT_GET);
 	cub = g_cub(ACT_GET);
 	x = 0;
-	flashlight_move(get_move_render());
-	xmemset(&ray, 0, sizeof(t_ray));
-	if (lx && cub)
+	if (cub)
 	{
-		ray.amp = *get_move_render();
-		fill_img_color(&get_img("framework")->img, 0);
-		while (x < 1280)
+		sh = get_img("framework");
+		if (sh)
 		{
-			init_ray(&ray, cub, x);
-			x++;
+			flashlight_move(get_move_render());
+			fill_img_color(&sh->img, 0xb82000);
+			ray.amp = *get_move_render();
+			while (x < 1280)
+			{
+				init_ray(&ray, cub, x);
+				x++;
+			}
 		}
 	}
 }

@@ -6,12 +6,25 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 06:21:01 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/03 18:00:36 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 17:25:02 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/openmlx.h"
 
+/// @brief get and return the image size
+/// @param sh image that you want to know the size
+/// @return 
+static __uint32_t	get_img_size(t_shaders *sh)
+{
+	if (sh)
+		return (sh->img.height * sh->img.len
+			+ sh->img.width * (sh->img.bpp / 8));
+	return (0);
+}
+
+/// @brief store shader with his info into a list
+/// @param new 
 static void	store_shaders(t_shaders *new)
 {
 	t_ml		*lx;
@@ -20,12 +33,12 @@ static void	store_shaders(t_shaders *new)
 	lx = gmlx(ACT_GET);
 	if (lx)
 	{
+		new->img.size = get_img_size(new);
 		sh = &lx->texture.shaders;
 		if (!sh->is_stored)
 		{
 			xmemcpy(sh, new, sizeof(t_shaders));
 			sh->is_stored = 1;
-			sh->next = NULL;
 		}
 		else
 		{
@@ -41,6 +54,12 @@ static void	store_shaders(t_shaders *new)
 	}
 }
 
+/// @brief make your own image with dimension, a specified color,
+///and the possibility to use all gived info by ui
+///to call a function after the image is created
+/// @param ui t_ui struct
+/// @param func function that u want call (func(t_img *, t_ui))
+/// @param name the name of the image
 void	create_img(t_ui ui, void (*func)(), char *name)
 {
 	t_ml		*lx;
@@ -70,6 +89,9 @@ void	create_img(t_ui ui, void (*func)(), char *name)
 	}
 }
 
+/// @brief register an local image .xpm e.g:
+///"./texture/ground.xpm" -> image name will be /ground.xpm
+/// @param path path of the image .xpm
 void	register_img(char *path)
 {
 	t_ml		*lx;

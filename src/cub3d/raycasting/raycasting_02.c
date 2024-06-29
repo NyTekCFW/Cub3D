@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 13:25:25 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/25 19:25:18 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 19:36:46 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_vec2	*get_move_render(void)
 	return (&amp);
 }
 
-__uint32_t	get_shadow(__uint32_t c, double dist)
+__uint32_t	get_shadow(__uint32_t c, float dist)
 {
 	if (dist >= 1.0)
 		c = 0x030303;

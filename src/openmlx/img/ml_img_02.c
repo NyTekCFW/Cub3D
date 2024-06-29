@@ -6,13 +6,17 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 12:03:40 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/19 15:17:24 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 17:16:51 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/openmlx.h"
 
-//repeat mode
+/// @brief insert pixel and fix if x is out of window
+/// @param d image to print
+/// @param xs position to print
+/// @param xy current pixel 
+/// @param rs get pixel of the image
 static void	blitting_inc(t_shaders *d, t_vec2 xs, t_vec2 *xy, t_vec2 *rs)
 {
 	__uint32_t	c;
@@ -26,6 +30,12 @@ static void	blitting_inc(t_shaders *d, t_vec2 xs, t_vec2 *xy, t_vec2 *rs)
 	xy->x++;
 }
 
+/// @brief print a image into the window via ml_put_pixel,
+/// if the dimension is bigger than the image the image 
+///will be repeated
+/// @param xs position to print
+/// @param dim dimension
+/// @param name name of the shader
 void	blitting_render(t_vec2 xs, t_vec2 dim, char *name)
 {
 	t_vec2		rs;
@@ -51,6 +61,9 @@ void	blitting_render(t_vec2 xs, t_vec2 dim, char *name)
 	}
 }
 
+/// @brief check if the current color is correct
+/// @param c color
+/// @return 
 int	is_valid_color(__uint32_t c)
 {
 	return ((c != 0 && c != 0xFF000000));

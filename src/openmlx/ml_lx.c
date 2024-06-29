@@ -6,12 +6,16 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:14:55 by lchiva            #+#    #+#             */
-/*   Updated: 2024/05/31 13:57:20 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 18:56:43 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/openmlx.h"
 
+/// @brief Initialise Get and Free all data
+///about the window
+/// @param e_gmlxact ACT_INIT | ACT_GET | ACT_FREE
+/// @return a ptr of t_ml *lx static struct or NULL
 t_ml	*gmlx(int e_gmlxact)
 {
 	static t_ml	*lx;

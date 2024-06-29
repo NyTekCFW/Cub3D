@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 17:03:39 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/25 23:35:50 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/26 21:54:10 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	draw_safe_area(void)
 		ml_setmode(&s, ML_MODE_LINE);
 		ml_savemesh(&s, get_img("framework"));
 		ml_overwrite(&s, 0);
+		ml_size(&s, 2);
 		ml_end(&s);
 	}
 }

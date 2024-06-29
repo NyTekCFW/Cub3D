@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 19:38:54 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/26 02:33:48 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/29 00:53:07 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	create_img_mesh(t_prim *s, char *name)
 		wh.y = max.y - min.y;
 		if (wh.x > 1 && wh.y > 1)
 		{
-			if (!get_img(name))
+			if (get_img(name) == NULL)
 				create_img((t_ui){0, 0, wh.x, wh.y, 0}, fill_img_color, name);
 			sh = get_img(name);
 			if (sh)
@@ -79,6 +79,7 @@ void	create_img_mesh(t_prim *s, char *name)
 		}
 	}
 }
+
 
 void	export_img(char *name)
 {
@@ -94,7 +95,7 @@ void	export_img(char *name)
 		xstrcpy(buffer, "./export/");
 		xstrcpy(buffer + xstrlen(buffer), name);
 		xstrcpy(buffer + xstrlen(buffer), ".bin\0");
-		fd = open(buffer, O_WRONLY | O_CREAT | O_TRUNC, 777);
+		fd = open(buffer, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		if (fd > 0)
 		{
 			xmemcpy(&tmp, sh, sizeof(t_shaders));
@@ -103,8 +104,8 @@ void	export_img(char *name)
 			tmp.is_stored = 0;
 			tmp.img.ptr = NULL;
 			tmp.img.addr = NULL;
-			write(fd, &tmp, sizeof(t_shaders));
-			write(fd, sh->img.addr, sh->img.height * sh->img.len + sh->img.width * (sh->img.bpp / 8));
+			xwrite(fd, &tmp, sizeof(t_shaders));
+			xwrite(fd, sh->img.addr, sh->img.height * sh->img.len + sh->img.width * (sh->img.bpp / 8));
 			close(fd);
 		}
 	}
@@ -116,6 +117,7 @@ void	load_exported(char *name)
 	t_shaders	*sh;
 	int			fd;
 	char		*nm;
+	ssize_t		p;
 
 	nm = xstrrchr(name, '/');
 	if (!get_img(nm))
@@ -123,12 +125,13 @@ void	load_exported(char *name)
 		fd = open(name, O_RDONLY, 777);
 		if (fd > 0)
 		{
-			read(fd, &tmp, sizeof(tmp));
+			p = read(fd, &tmp, sizeof(tmp));
 			create_img((t_ui){0, 0, tmp.img.width, tmp.img.height, 0}, fill_img_color, nm);
 			sh = get_img(nm);
 			if (sh)
 			{
-				read(fd, sh->img.addr, sh->img.height * sh->img.len + sh->img.width * (sh->img.bpp / 8));
+				p = read(fd, sh->img.addr, sh->img.height * sh->img.len + sh->img.width * (sh->img.bpp / 8));
+				(void)p;
 			}
 			close(fd);
 		}

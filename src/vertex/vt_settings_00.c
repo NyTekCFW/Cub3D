@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 11:52:54 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/19 15:17:32 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 20:07:20 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	ml_can_draw(t_prim *s, t_vec2 xy)
 	{
 		if (s->wrapping == ML_WRAP_REPEAT_CENTER)
 			image_center(s, &cv);
-		if (s->wrapping == ML_WRAP_MIRRORED_REPEAT)
+		else if (s->wrapping == ML_WRAP_MIRRORED_REPEAT)
 			image_mirror(s, &cv);
 		if (s->uv == ML_UV_90)
 			cv = (t_vec2){cv.y, cv.x};

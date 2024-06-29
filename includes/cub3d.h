@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/26 00:33:33 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 19:37:37 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ typedef struct map_s
 	int		dimension;
 }	t_map;
 
+
+
 typedef struct cb_s
 {
 	t_screen		screen;
@@ -114,7 +116,7 @@ void		draw_ceiling(int x, t_ray *ray, t_player *p);
 void		draw_floor(int x, t_ray *ray, t_player *p);
 void		draw_walls(int x, t_ray *ray, t_player *p);
 void		flashlight_move(t_vec2 *u);
-__uint32_t	get_shadow(__uint32_t c, double dist);
+__uint32_t	get_shadow(__uint32_t c, float dist);
 //map
 void		map_init(t_cb *cub);
 //

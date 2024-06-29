@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 06:08:03 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/26 02:25:16 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 00:06:52 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,14 @@ typedef struct ui_s
 
 typedef struct s_img
 {
-	void	*ptr;
-	char	*addr;
-	int		bpp;
-	int		len;
-	int		endian;
-	int		width;
-	int		height;
+	void		*ptr;
+	char		*addr;
+	int			bpp;
+	int			len;
+	int			endian;
+	int			width;
+	int			height;
+	__uint32_t	size;
 }	t_img;
 
 typedef struct shader_s
@@ -53,6 +54,7 @@ void		register_img(char *path);
 void		print_img(t_vec2 pos, char *name);
 void		purge_textures(void);
 void		merge_img(t_shaders *d, t_shaders *b, t_vec2 u);
+void		merge_img_overlay(t_img *d, t_img *b, t_vec2 u);
 t_shaders	*get_img(char *name);
 __uint32_t	blend_colors(__uint32_t bkg, __uint32_t frg, float alpha);
 void		set_color(t_img *img, int adr, __uint32_t clr);

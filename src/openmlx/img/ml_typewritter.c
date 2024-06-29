@@ -6,12 +6,15 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:58:38 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 08:35:10 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 18:43:22 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/openmlx.h"
 
+/// @brief get width of character
+/// @param c character
+/// @return 
 static int	font_spacing(char c)
 {
 	if (c >= '0' && c <= '9')
@@ -30,6 +33,10 @@ static int	font_spacing(char c)
 	return (19);
 }
 
+/// @brief get width of a string
+///with font_spacing
+/// @param str string
+/// @return 
 int	r_textwidth(char *str)
 {
 	int	i;
@@ -45,6 +52,7 @@ int	r_textwidth(char *str)
 	return (w);
 }
 
+/// @brief get height of a string
 int	r_textheight(char *str)
 {
 	int	i;
@@ -61,6 +69,10 @@ int	r_textheight(char *str)
 	return (w);
 }
 
+/// @brief write a text into window
+///with monospace_ttf fonts
+/// @param str string
+/// @param v position
 void	typewritter(char *str, t_vec2 v)
 {
 	size_t	i;

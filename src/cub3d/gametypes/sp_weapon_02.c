@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 16:16:42 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 08:40:15 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/06/28 22:21:51 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	weapon_fired(void)
 			if (weap->ammo_clip > 0)
 			{
 				weap->ammo_clip -= 1;
+				cub->player.velocity = 1.6f;
 				if (weap->ammo_clip == 0)
 					weapon_reload();
 			}
