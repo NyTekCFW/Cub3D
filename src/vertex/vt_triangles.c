@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 11:09:48 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/26 20:38:56 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 03:12:02 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,9 @@ static void	ml_draw_triangles_calc(t_prim *s, int *inter, int y)
 	ml_draw_triangles_inter(s, inter, xinter, y);
 }
 
+/// @brief render function for
+///triangles primitive
+/// @param s current primitive
 void	ml_draw_triangles(t_prim *s)
 {
 	int		i;

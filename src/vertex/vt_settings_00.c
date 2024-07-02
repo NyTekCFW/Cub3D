@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 11:52:54 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/28 20:07:20 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 03:09:25 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ static void	image_mirror(t_prim *s, t_vec2 *xy)
 	xy->y = u.y;
 }
 
+/// @brief check if the current primitive
+///can be show at xy postion,
+///apply some fix and apply some
+///settings like wrapping
+/// @param s current primitive
+/// @param xy position (x, y)
+/// @return 
 int	ml_can_draw(t_prim *s, t_vec2 xy)
 {
 	t_vec2	cv;
@@ -82,12 +89,19 @@ int	ml_can_draw(t_prim *s, t_vec2 xy)
 	return (1);
 }
 
+/// @brief set a shader where the current
+///primitive will be saved in.
+/// @param s current primitive
+/// @param sh shader obtained via get_img("...")
 void	ml_savemesh(t_prim *s, t_shaders *sh)
 {
 	if (sh)
 		s->savemesh = &sh->img;
 }
 
+/// @brief render function of
+///primitive lines loop and strip
+/// @param s current primitive
 void	ml_draw_line_sl(t_prim *s)
 {
 	int	i;

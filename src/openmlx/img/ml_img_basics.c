@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 08:25:08 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/29 00:51:00 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 02:32:12 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	print_img(t_vec2 pos, char *name)
 	if (lx)
 	{
 		sh = &lx->texture.shaders;
-		while (sh && sh->file != xhashstr(name))
+		while (sh && sh->file != fnv1a_hash(name))
 			sh = sh->next;
 		if (!sh)
 			return ;
@@ -92,7 +92,7 @@ t_shaders	*get_img(char *name)
 	if (lx)
 	{
 		sh = &lx->texture.shaders;
-		while (sh && sh->file != xhashstr(name))
+		while (sh && sh->file != fnv1a_hash(name))
 			sh = sh->next;
 		if (!sh)
 			return (NULL);

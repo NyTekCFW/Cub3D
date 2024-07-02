@@ -36,7 +36,7 @@ COLOR_REVERSE_BRIGHT = \033[7;7m
 COLOR_HIDDEN_BRIGHT = \033[8;8m
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O3
+CFLAGS = -Wall -Wextra -Werror -O3 -march=native
 RM = rm -rf
 NAME = cub3d
 OBJ_DIR = obj

@@ -6,21 +6,11 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 17:28:58 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/03 17:54:56 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 02:32:47 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/openmlx.h"
-
-__uint32_t	xhashstr(const char *str)
-{
-	__uint32_t	hash;
-
-	hash = 2784;
-	while (*str++)
-		hash = ((hash << 5) + hash) + (int)*str;
-	return (hash);
-}
 
 __uint32_t	fnv1a_hash(const char *str)
 {

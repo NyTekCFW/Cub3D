@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 08:32:45 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/26 20:22:56 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 03:03:30 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,9 @@ static void	ml_draw_quads_calc(t_prim *s, int *inter, int y)
 	ml_draw_quads_inter(s, inter, xinter, y);
 }
 
+/// @brief render function for
+///quads primitive
+/// @param s current primitive
 void	ml_draw_quads(t_prim *s)
 {
 	int		i;

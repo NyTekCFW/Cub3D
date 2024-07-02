@@ -6,12 +6,14 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:40:39 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/26 21:57:09 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 02:19:38 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/openmlx.h"
 
+/// @brief create basics shaders of openmlx
+/// @param lx gmlx pointer
 static void	_ml_set_win_data(t_ml *lx)
 {
 	_ml_set_win_data_pixel();
@@ -20,6 +22,9 @@ static void	_ml_set_win_data(t_ml *lx)
 	lx->purge_window();
 }
 
+/// @brief create a window and open it
+/// @param title title of the window
+/// @return 
 int	_ml_create_window(char *title)
 {
 	t_ml	*lx;
@@ -43,6 +48,10 @@ int	_ml_create_window(char *title)
 	return (0);
 }
 
+/// @brief set width and height of the futur window
+/// @param w width
+/// @param h height
+/// @return 
 int	_ml_set_window_size(int w, int h)
 {
 	t_ml	*lx;
@@ -57,15 +66,22 @@ int	_ml_set_window_size(int w, int h)
 	return (0);
 }
 
+/// @brief purge window and print cleared color
+/// @param  
 void	_ml_purge_window(void)
 {
 	t_ml		*lx;
 
 	lx = gmlx(ACT_GET);
-	if (lx)
+	if (lx && lx->ptr && lx->win)
+	{
+		mlx_clear_window(lx->ptr, lx->win);
 		print_img((t_vec2){0, 0}, "clear_window");
+	}
 }
 
+/// @brief purge openmlx stuff
+/// @param  
 void	_ml_quit(void)
 {
 	t_ml	*lx;

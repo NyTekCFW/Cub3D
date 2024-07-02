@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/28 22:18:35 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 15:11:36 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ void	register_xpm(void)
 	lx = gmlx(ACT_GET);
 	if (lx && cub)
 	{
-		load_exported("./export/framework.bin");
+		register_exp_img("./export/framework.bin");
 		//basic
 		register_img("./textures/huds/dpad.xpm");
 		register_img("./textures/huds/dpad_bar.xpm");

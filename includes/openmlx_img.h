@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 06:08:03 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/28 00:06:52 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 15:10:28 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,5 @@ void		typewritter(char *str, t_vec2 v);
 int			r_textheight(char *str);
 int			r_textwidth(char *str);
 void		export_img(char *name);
-void		load_exported(char *name);
+void		register_exp_img(char *name);
 #endif

@@ -6,12 +6,13 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 08:56:41 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/01 09:37:52 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 02:15:17 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/openmlx.h"
 
+/// @brief create 255 pixel shaders
 void	_ml_set_win_data_pixel(void)
 {
 	int		i;
@@ -30,6 +31,8 @@ void	_ml_set_win_data_pixel(void)
 	}
 }
 
+/// @brief change color of the purge image
+/// @param color color to apply
 void	_ml_set_purge_color(__uint32_t color)
 {
 	t_ml		*lx;

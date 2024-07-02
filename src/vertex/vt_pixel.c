@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 19:43:35 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/04 11:46:06 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 03:01:03 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 #ifndef SO_LONG_PROJECT
 
+/// @brief insert a pixel into the window
+/// @param x position x of the window
+/// @param y position y of the window
+/// @param color color
 void	ml_put_pixel(int x, int y, __uint32_t color)
 {
 	t_ml	*lx;
@@ -28,6 +32,10 @@ void	ml_put_pixel(int x, int y, __uint32_t color)
 }
 #else
 
+/// @brief mlx_pixel_put rebuilded with pixel image
+/// @param x position x of the window
+/// @param y position y of the window
+/// @param color color to set before print the image
 void	ml_put_pixel(int x, int y, __uint32_t color)
 {
 	t_ml		*lx;

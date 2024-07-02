@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/28 23:38:54 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/29 02:13:26 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 02:30:48 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ static void	_smo_set(void *dst, const void *v, size_t n, size_t *i)
 		*i += 1;
 }
 
+/// @brief SIMD Memory Optimization
+///for basic memory block set
+/// @param dst memory destination
+/// @param c value in unsigned char
+/// @param n size to copy
 void	smo_set(void *dst, __uint8_t c, size_t n)
 {
 	size_t		i;

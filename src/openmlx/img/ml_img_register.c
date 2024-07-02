@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 06:21:01 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/28 17:25:02 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 02:32:21 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	create_img(t_ui ui, void (*func)(), char *name)
 	if (lx && get_img(name) == NULL)
 	{
 		xmemset(&box, 0, sizeof(t_shaders));
-		box.file = xhashstr(name);
+		box.file = fnv1a_hash(name);
 		box.img.height = ui.h;
 		box.img.width = ui.w;
 		box.created = 1;
@@ -108,7 +108,7 @@ void	register_img(char *path)
 				path, &sh.img.width, &sh.img.height);
 		sh.img.addr = mlx_get_data_addr(sh.img.ptr,
 				&sh.img.bpp, &sh.img.len, &sh.img.endian);
-		sh.file = xhashstr(xstrrchr(path, '/'));
+		sh.file = fnv1a_hash(xstrrchr(path, '/'));
 		sh.next = NULL;
 		store_shaders(&sh);
 	}

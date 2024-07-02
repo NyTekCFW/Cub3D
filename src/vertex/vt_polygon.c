@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 11:23:01 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/26 20:38:17 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 03:02:20 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,9 @@ static void	ml_draw_poly_calc(t_prim *s, int *inter, int y)
 	xfree((void **)&xinter);
 }
 
+/// @brief render function for
+///polygon primitive
+/// @param s current primitive
 void	ml_draw_polygon(t_prim *s)
 {
 	int		i;

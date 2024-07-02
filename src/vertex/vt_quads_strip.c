@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/01 19:45:18 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/25 23:03:12 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 03:03:13 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ static void	ml_quad_settings(t_prim *d, t_prim *b)
 	}
 }
 
+/// @brief render for quad strip
+/// primitive
+/// @param s current primitive
 void	ml_draw_quad_strip(t_prim *s)
 {
 	int		i;

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 13:33:10 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/25 21:31:03 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/02 03:04:39 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ static void	lines_input(t_prim *s, t_vec2 data)
 	}
 }
 
+/// @brief render function for
+///points primitive
+/// @param s current primitive
 void	ml_draw_points(t_prim *s)
 {
 	t_vec2		p;
@@ -83,6 +86,9 @@ static void	lines_render(t_prim *s, double imz[], t_vec2 p[], double d[])
 	}
 }
 
+/// @brief render function for
+///lines primitive
+/// @param s current primitive
 void	ml_draw_lines(t_prim *s, int w, int e)
 {
 	double	d[2];
