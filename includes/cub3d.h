@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/28 19:37:37 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/03 16:15:25 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void		ray_get_color(t_ray *ray);
 void		draw_ceiling(int x, t_ray *ray, t_player *p);
 void		draw_floor(int x, t_ray *ray, t_player *p);
 void		draw_walls(int x, t_ray *ray, t_player *p);
+t_shaders	*get_walls_texture(t_ray *ray);
 void		flashlight_move(t_vec2 *u);
 __uint32_t	get_shadow(__uint32_t c, float dist);
 //map

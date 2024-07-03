@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/02 15:11:36 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/03 01:19:22 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,46 +16,48 @@
 
 clock_t	timer = 0;
 
-//int o = 0;
 int	display(t_ml *lx)
 {
 	t_cb		*cub;
 	t_screen	*screen;
-	static clock_t		ck = 1000000;
+	char		buffer[32];
 
 	cub = g_cub(ACT_GET);
 	if (cub && lx && lx->refresh)
 	{
 		while (clock() < timer)
 			;
+		xmemset(buffer, 0, sizeof(buffer));
+		xstrcpy(buffer, "FPS : ");
 		clock_t dd = clock();
 		screen = &cub->screen;
 		raycast_env();
 		run_weapon_anim();
 		merge_img(get_img("framework"), get_img(g_cub(ACT_GET)->player.weapon->anim_buffer), (t_vec2){(screen->x + 300 + get_move_render()->x) * getvar(VAR_GUN_X),((screen->y - 35) + get_move_render()->y) * getvar(VAR_GUN_Y)});
-		typewritter("\nHold F to\n open [Cost: 4000$]", (t_vec2)
-		{
-			cub->screen.area.a1.x,
-			cub->screen.area.a1.y + 300
-		});
 		
 		
 		hud_render();
-		draw_safe_area();
+		//draw_safe_area();
 		
 		if (lx->record.status)
 			save_record();
 		if (lx->video.status)
 			display_video((t_vec2){screen->x, screen->y});
 	//	load_video("./export/video.bin\0");
+		int tmp = 1000000 / (clock() - dd);
+		if (tmp >= 1000)
+			buffer[xstrlen(buffer)] = 0x30 + (tmp / 1000);
+		if (tmp >= 100)
+			buffer[xstrlen(buffer)] = 0x30 + ((tmp / 100) % 10);
+		if (tmp >= 10)
+			buffer[xstrlen(buffer)] = 0x30 + ((tmp / 10) % 10);
+		buffer[xstrlen(buffer)] = 0x30 + (tmp % 10);
+		typewritter(buffer, (t_vec2)
+		{
+			cub->screen.area.a1.x,
+			cub->screen.area.a1.y + 300
+		});
 		print_img((t_vec2){screen->x, screen->y}, "framework");
-		clock_t cc = clock();
-		if (cc - dd < ck)
-			ck = cc - dd, printf("min : %li\n",ck);
-		printf("%li\n",clock() -  dd);
-		//o++;
-		//if (o == 10)
-		//	exit(1);
 		timer = clock() + getvarint(VAR_FPS);
 		cub->player.velocity -= 0.2;
 		if (cub->player.velocity < 0)
@@ -231,6 +233,11 @@ void	register_xpm(void)
 		register_img("./textures/ground.xpm");
 		register_img("./textures/rock.xpm");
 		register_img("./textures/link_head.xpm");
+		//walls
+		register_img("./textures/walls/brick_red.xpm");
+		register_img("./textures/walls/brick_white.xpm");
+		register_img("./textures/walls/cinderblock.xpm");
+		register_img("./textures/walls/roof_brick.xpm");
 		//fonts
 		register_img("./textures/fonts/monospace_ttf.xpm");
 		split_image("/monospace_ttf.xpm", "monospace_", 32, 0);
