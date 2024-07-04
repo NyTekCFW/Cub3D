@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/03 16:15:25 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/04 02:48:07 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,17 @@
 # include "openmlx.h"
 # include "cub3d_wpn.h"
 # include "cub3d_dvars.h"
+
+enum e_cub_texture
+{
+	TEX_WALL_SOUTH	= 0,
+	TEX_WALL_NORTH,
+	TEX_WALL_EAST,
+	TEX_WALL_WEST,
+	TEX_GROUND,
+	TEX_CEILING,
+	TEX_RENDER
+};
 
 typedef struct area_s
 {
@@ -35,21 +46,22 @@ typedef struct screen_s
 
 typedef struct ray_s
 {
-	int		hit;
-	int		side;
-	int		line_height;
-	int		draw_start;
-	int		draw_end;
-	int		color;
-	double	camera;
-	double	pwall_dist;
-	float	wall_x;
-	t_vec2f	dir;
-	t_vec2f	side_dist;
-	t_vec2f	delta_dist;
-	t_vec2	map;
-	t_vec2	step;
-	t_vec2	amp;
+	int			hit;
+	int			side;
+	int			line_height;
+	int			draw_start;
+	int			draw_end;
+	int			color;
+	double		camera;
+	double		pwall_dist;
+	float		wall_x;
+	t_vec2f		dir;
+	t_vec2f		side_dist;
+	t_vec2f		delta_dist;
+	t_vec2		map;
+	t_vec2		step;
+	t_vec2		amp;
+	t_shaders	**texture;
 }	t_ray;
 
 //minimap
@@ -99,6 +111,7 @@ typedef struct cb_s
 	t_player		player;
 	t_dvars			vars[8];
 	t_weapon_data	weapons[2];
+	t_shaders		*texture[7];
 }	t_cb;
 
 //cub struct

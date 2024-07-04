@@ -6,13 +6,58 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/03 01:19:22 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/04 02:57:37 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-//SIMD Memory Optimization (SMO) 
+
+
+void	load_game_textures(t_cb *cub, __uint32_t cg, __uint32_t cc)
+{
+	t_vec2		u;
+	int			i;
+	__uint32_t	c[2];
+	__uint32_t	adr;
+
+	xmemcpy(c, (__uint32_t []){cg, cc}, sizeof(c));
+	u = (t_vec2){0, 0};
+	if (cub)
+	{
+		cub->texture[TEX_WALL_SOUTH] = get_img("/brick_red.xpm");
+		cub->texture[TEX_WALL_NORTH] = get_img("/brick_white.xpm");
+		cub->texture[TEX_WALL_EAST] = get_img("/cinderblock.xpm");
+		cub->texture[TEX_WALL_WEST] = get_img("/roof_brick.xpm");
+		cub->texture[TEX_GROUND] = get_img("/dlc2.xpm");
+		cub->texture[TEX_CEILING] = get_img("/wall_brownstone.xpm");
+		cub->texture[TEX_RENDER] = get_img("framework");
+		i = TEX_GROUND;
+		while (i < TEX_RENDER)
+		{
+			if (cub->texture[i])
+			{
+				if (is_valid_color(c[i - TEX_GROUND]))
+				{
+					u.y = 0;
+					while (u.y < cub->texture[i]->img.height)
+					{
+						u.x = 0;
+						while (u.x < cub->texture[i]->img.height)
+						{
+							adr = get_px_adr(&cub->texture[i]->img, u);
+							if (is_valid_color(*(__uint32_t *)(cub->texture[i]->img.addr + adr)))
+								set_color(&cub->texture[i]->img, adr, blend_colors(*(__uint32_t *)(cub->texture[i]->img.addr + adr), c[i - TEX_GROUND], 0.6));
+							u.x++;
+						}
+						u.y++;
+					}
+				}
+			}
+			i++;
+		}
+	}
+}
 
 clock_t	timer = 0;
 
@@ -238,6 +283,9 @@ void	register_xpm(void)
 		register_img("./textures/walls/brick_white.xpm");
 		register_img("./textures/walls/cinderblock.xpm");
 		register_img("./textures/walls/roof_brick.xpm");
+		register_img("./textures/walls/wall_brownstone.xpm");
+		register_img("./textures/walls/grate.xpm");
+		register_img("./textures/walls/dlc2.xpm");
 		//fonts
 		register_img("./textures/fonts/monospace_ttf.xpm");
 		split_image("/monospace_ttf.xpm", "monospace_", 32, 0);
@@ -250,6 +298,7 @@ void	register_xpm(void)
 		register_img("./textures/weapon/M1911_idle_walk.xpm");
 		i = split_image("/M1911_idle_walk.xpm", "M1911_walk_", 640, 0);
 		cub->weapons[WPN_M1911].frame[WPN_FRAME_WALK] = i - 1;
+		load_game_textures(cub, 0x00FFFF, 0xFF0000);
 	}
 }
 

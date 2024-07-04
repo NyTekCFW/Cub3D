@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 13:25:25 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/03 16:15:10 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/04 02:50:56 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,16 @@ t_shaders	*get_walls_texture(t_ray *ray)
 	if (ray->side == 0)
 	{
 		if (ray->dir.x < 0)
-			return (get_img("/brick_red.xpm"));
+			return (ray->texture[TEX_WALL_WEST]);//return (get_img("/brick_red.xpm"));
 		else
-			return (get_img("/brick_white.xpm"));
+			return (ray->texture[TEX_WALL_EAST]);
 	}
 	else
 	{
 		if (ray->dir.y > 0)
-			return (get_img("/cinderblock.xpm"));
+			return (ray->texture[TEX_WALL_SOUTH]);
 		else
-			return (get_img("/roof_brick.xpm"));
+			return (ray->texture[TEX_WALL_NORTH]);
 	}
 }
 /*

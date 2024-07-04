@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 11:03:57 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/03 18:41:47 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/04 02:48:37 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ c = blend_colors(get_px_color(&cl->img, cell), 0xFF0000, 0.4);
 static void	ray_line(t_ray *ray, t_cb *cub)
 {
 	if (ray->side == 0)
-		ray->pwall_dist = (ray->map.x - cub->player.origin.x + (1 - ray->step.x) / 2) / ray->dir.x;//(ray->side_dist.x - ray->delta_dist.x);
+		ray->pwall_dist = (ray->side_dist.x - ray->delta_dist.x);
 	else
-		ray->pwall_dist = (ray->map.y - cub->player.origin.y + (1 - ray->step.y) / 2) / ray->dir.y;//(ray->side_dist.y - ray->delta_dist.y);
+		ray->pwall_dist = (ray->side_dist.y - ray->delta_dist.y);
 	ray->line_height = (int)(720 / ray->pwall_dist);
 	ray->draw_start = (-ray->line_height / 2) + 360 + (tanf(cub->player.vangle) * 360.0);
 	if (ray->draw_start < 0)
@@ -127,6 +127,7 @@ void	raycast_env(void)
 			flashlight_move(get_move_render());
 			fill_img_color(&sh->img, 0xb82000);
 			ray.amp = *get_move_render();
+			ray.texture = cub->texture;
 			while (x < 1280)
 			{
 				init_ray(&ray, cub, x);
