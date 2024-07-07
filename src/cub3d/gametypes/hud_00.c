@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:37:53 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/03 01:04:27 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 23:36:17 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,13 @@ void	hud_render(void)
 	cub = g_cub(ACT_GET);
 	if (cub)
 	{
-		sh = get_img("framework");
+		sh = cub->texture[TEX_RENDER];//get_img("framework");
 		if (sh)
 		{
 			weapon_hud(cub, sh);
 			score_hud(cub, sh);
 			health_bar(cub, sh);
-			crosshair_hud(cub);
+			crosshair_hud(cub, sh);
 		}
 	}
 }

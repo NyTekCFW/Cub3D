@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:12:25 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/27 19:38:51 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 19:57:12 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,20 @@
 # include "openmlx_video.h"
 
 # define PI 3.14159265359
-# define GRAPHICS_SYNC_DELAY 0
 
 typedef struct ml_s
 {
+	void		*ptr;
+	void		*win;
+	void		(*(purge_window))();
+	void		(*(new_purge_color))();
+	void		(*(quit_window))();
+	int			(*(set_win_size))();
+	int			(*(make_window))();
 	int			width;
 	int			height;
 	int			debug;
 	int			refresh;
-	void		*ptr;
-	void		*win;
-	int			(*(set_win_size))();
-	int			(*(make_window))();
-	void		(*(purge_window))();
-	void		(*(new_purge_color))();
-	void		(*(quit_window))();
 	__uint32_t	purge_color;
 	t_texture	texture;
 	t_rec		record;

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:14:13 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/28 17:40:39 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 19:08:11 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	split_image(char *name, char *output, int width, int i)
 			while (u < (imgx[0]->img.width / width))
 			{
 				update_splitted_name(buffer, xstrlen(output), i + u);
-				create_img((t_ui){0, 0, width, imgx[0]->img.height, 0},
+				create_img((t_ui){width, imgx[0]->img.height, 0},
 					NULL, buffer);
 				imgx[1] = get_img(buffer);
 				if (imgx[1])

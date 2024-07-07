@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 11:03:57 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/04 02:48:37 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 22:52:15 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ static void	ray_line(t_ray *ray, t_cb *cub)
 	else
 		ray->pwall_dist = (ray->side_dist.y - ray->delta_dist.y);
 	ray->line_height = (int)(720 / ray->pwall_dist);
-	ray->draw_start = (-ray->line_height / 2) + 360 + (tanf(cub->player.vangle) * 360.0);
+	ray->draw_start = (-ray->line_height / 2) + 360 + ray->v_offset;
 	if (ray->draw_start < 0)
 		ray->draw_start = 0;
-	ray->draw_end = (ray->line_height / 2) + 360 + (tanf(cub->player.vangle) * 360.0);
+	ray->draw_end = (ray->line_height / 2) + 360 + ray->v_offset;
 	if (ray->draw_end >= 720)
 		ray->draw_end = 719;
 	if (ray->side == 0)
@@ -91,7 +91,7 @@ static void	init_ray(t_ray *ray, t_cb *cub, int x)
 
 	player = &cub->player;
 	ray->camera = ((2 * x) / (float)1280 - 1)
-		* (tanf(getvar(VAR_ASPECT) / 2) * 1.777777778);
+		* (tanf(ray->var_aspect) * 1.777777778);
 	ray->dir.x = player->dir.x + player->plane.x * ray->camera;
 	ray->dir.y = player->dir.y + player->plane.y * ray->camera;
 	ray->map = (t_vec2){(int)player->origin.x, (int)player->origin.y};
@@ -115,19 +115,21 @@ void	raycast_env(void)
 	t_ray		ray;
 	t_cb		*cub;
 	int			x;
-	t_shaders	*sh;
 
-	cub = g_cub(ACT_GET);
 	x = 0;
+	cub = g_cub(ACT_GET);
 	if (cub)
 	{
-		sh = get_img("framework");
-		if (sh)
+		ray.var_shadow = getvar(VAR_SHADOWS);
+		ray.var_aspect = getvar(VAR_ASPECT) / 2;
+		ray.var_lightradius = getvar(VAR_FLASHLIGHT_RADIUS);
+		ray.texture = cub->texture;
+		ray.v_offset = tanf(cub->player.vangle) * 360;
+		if (ray.texture[TEX_RENDER])
 		{
 			flashlight_move(get_move_render());
-			fill_img_color(&sh->img, 0xb82000);
+			fill_img_color(&ray.texture[TEX_RENDER]->img, 0xb82000);
 			ray.amp = *get_move_render();
-			ray.texture = cub->texture;
 			while (x < 1280)
 			{
 				init_ray(&ray, cub, x);

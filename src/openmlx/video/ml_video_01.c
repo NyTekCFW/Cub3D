@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 17:30:08 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/02 14:55:53 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 19:08:15 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	start_video(char *name, int rate)
 			if (read(vd->fd, &tmp, sizeof(tmp)) > 0)
 			{
 				if (!get_img(nm))
-					create_img((t_ui){0, 0, tmp.img.width,
+					create_img((t_ui){tmp.img.width,
 						tmp.img.height, 0}, fill_img_color, nm);
 				xstrcpy(vd->buffer, nm);
 				return (vd->rate = rate, (void)0);

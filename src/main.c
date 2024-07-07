@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/04 02:57:37 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 23:13:38 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	display(t_ml *lx)
 		screen = &cub->screen;
 		raycast_env();
 		run_weapon_anim();
-		merge_img(get_img("framework"), get_img(g_cub(ACT_GET)->player.weapon->anim_buffer), (t_vec2){(screen->x + 300 + get_move_render()->x) * getvar(VAR_GUN_X),((screen->y - 35) + get_move_render()->y) * getvar(VAR_GUN_Y)});
+		merge_img(get_img("framework"), get_img(g_cub(ACT_GET)->player.weapon->anim_buffer), (t_vec2){(screen->x + 300 + (get_move_render()->x * cub->player.velocity)) * getvar(VAR_GUN_X),((screen->y - 35) + (get_move_render()->y * cub->player.velocity)) * getvar(VAR_GUN_Y)});
 		
 		
 		hud_render();
@@ -274,6 +274,8 @@ void	register_xpm(void)
 		register_img("./textures/huds/dpad.xpm");
 		register_img("./textures/huds/dpad_bar.xpm");
 		register_img("./textures/huds/hud_score.xpm");
+		register_img("./textures/huds/crosshair_v.xpm");
+		register_img("./textures/huds/crosshair_h.xpm");
 		register_img("./textures/brick_argb.xpm");
 		register_img("./textures/ground.xpm");
 		register_img("./textures/rock.xpm");
@@ -283,16 +285,14 @@ void	register_xpm(void)
 		register_img("./textures/walls/brick_white.xpm");
 		register_img("./textures/walls/cinderblock.xpm");
 		register_img("./textures/walls/roof_brick.xpm");
-		register_img("./textures/walls/wall_brownstone.xpm");
-		register_img("./textures/walls/grate.xpm");
 		register_img("./textures/walls/dlc2.xpm");
 		//fonts
 		register_img("./textures/fonts/monospace_ttf.xpm");
 		split_image("/monospace_ttf.xpm", "monospace_", 32, 0);
 		//render
-		create_img((t_ui){0, 0, 1280, 720, 0},
+		create_img((t_ui){1280, 720, 0},
 			fill_img_color, "framework");
-		create_img((t_ui){0, 0, 1280, 720, 0},
+		create_img((t_ui){1280, 720, 0},
 			fill_img_color, "framework_rev");
 		//weapon
 		register_img("./textures/weapon/M1911_idle_walk.xpm");

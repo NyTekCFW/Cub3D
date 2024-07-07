@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 04:09:00 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/02 15:08:03 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 19:08:22 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	register_exp_img(char *name)
 		if (fd > 0)
 		{
 			p = read(fd, &tmp, sizeof(tmp));
-			create_img((t_ui){0, 0, tmp.img.width,
+			create_img((t_ui){tmp.img.width,
 				tmp.img.height, 0}, fill_img_color, nm);
 			sh = get_img(nm);
 			if (sh)

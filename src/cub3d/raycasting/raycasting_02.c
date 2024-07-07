@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 13:25:25 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/04 02:50:56 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 22:32:21 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_shaders	*get_walls_texture(t_ray *ray)
 	if (ray->side == 0)
 	{
 		if (ray->dir.x < 0)
-			return (ray->texture[TEX_WALL_WEST]);//return (get_img("/brick_red.xpm"));
+			return (ray->texture[TEX_WALL_WEST]);
 		else
 			return (ray->texture[TEX_WALL_EAST]);
 	}

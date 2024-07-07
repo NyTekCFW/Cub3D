@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 08:56:41 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/02 02:15:17 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 19:08:04 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	_ml_set_win_data_pixel(void)
 		buffer[9] = 0x30 + (i / 100);
 		buffer[10] = 0x30 + ((i / 10) % 10);
 		buffer[11] = 0x30 + (i % 10);
-		create_img((t_ui){0, 0, 1, 1, 0x000000},
+		create_img((t_ui){1, 1, 0x000000},
 			fill_img_color, buffer);
 		i++;
 	}

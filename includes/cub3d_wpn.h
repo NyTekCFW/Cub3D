@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:54 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/25 16:28:03 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 22:40:16 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ enum e_weapons_fire_mode
 
 typedef struct weapon_data_s
 {
+	char		name[32];
+	int			frame[5];
 	int			id;
 	int			type;
-	int			frame[5];
-	char		name[32];
 	__uint32_t	debugname;
 	__uint32_t	max_ammo_stock;
 	__uint32_t	max_ammo_clip;

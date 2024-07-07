@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 19:38:54 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/02 15:09:47 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 19:08:18 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	register_mesh_img(t_vec2 max, t_vec2 min, t_prim *s, char *name)
 	if (wh.x > 1 && wh.y > 1)
 	{
 		if (get_img(name) == NULL)
-			create_img((t_ui){0, 0, wh.x, wh.y, 0}, fill_img_color, name);
+			create_img((t_ui){wh.x, wh.y, 0}, fill_img_color, name);
 		sh = get_img(name);
 		if (sh)
 		{

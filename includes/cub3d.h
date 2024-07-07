@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/04 02:48:07 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 23:37:27 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,10 @@ typedef struct ray_s
 	t_vec2		step;
 	t_vec2		amp;
 	t_shaders	**texture;
+	double		var_shadow;
+	double		var_aspect;
+	double		var_lightradius;
+	float		v_offset;
 }	t_ray;
 
 //minimap
@@ -138,5 +142,5 @@ int			check_move(t_cb *cub, t_vec2 v);
 void		player_settings(t_cb *cub);
 //
 void		hud_render(void);
-void		crosshair_hud(t_cb *cub);
+void		crosshair_hud(t_cb *cub, t_shaders *sh);
 #endif

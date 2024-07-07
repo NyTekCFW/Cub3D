@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:40:39 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/02 02:19:38 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 19:08:00 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 static void	_ml_set_win_data(t_ml *lx)
 {
 	_ml_set_win_data_pixel();
-	create_img((t_ui){0, 0, lx->width, lx->height, lx->purge_color},
+	create_img((t_ui){lx->width, lx->height, lx->purge_color},
 		fill_img_color, "clear_window");
 	lx->purge_window();
 }
