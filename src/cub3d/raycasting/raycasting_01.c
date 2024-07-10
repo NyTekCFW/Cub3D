@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 11:21:23 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/07 22:57:18 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/08 22:19:12 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	draw_ceiling(int x, t_ray *ray, t_player *p)
 	int			y;
 	__uint32_t	c;
 
-	sh = ray->texture[TEX_RENDER];//get_img("framework");
+	sh = ray->texture[TEX_RENDER];
 	if (sh)
 	{
 		y = ray->draw_start - 1;
@@ -106,8 +106,6 @@ void draw_floor(int x, t_ray *ray, t_player *p)
     }
 }
 
-
-
 void draw_walls(int x, t_ray *ray, t_player *p)
 {
     t_shaders *sh;
@@ -145,51 +143,3 @@ void draw_walls(int x, t_ray *ray, t_player *p)
         }
     }
 }
-
-/*
-void draw_ceiling(int x, t_ray *ray, t_player *p)
-{
-    t_shaders *sh;
-    t_shaders *ceiling;
-    int y;
-    __uint32_t c;
-    __uint32_t s;
-    double ceiling_x, ceiling_y;
-    double row_distance;
-    int tex_x, tex_y;
-    
-    sh = ray->texture[TEX_RENDER];
-    ceiling = ray->texture[TEX_CEILING];
-    if (sh && ceiling)
-    {
-        y = ray->draw_start - 1;
-        while (y >= 0)
-        {
-			row_distance = 720.0 / (2.0 * y - 720.0 - 2.0 * ray->v_offset);
-
-            ceiling_x = p->origin.x + row_distance * ray->dir.x;
-            ceiling_y = p->origin.y + row_distance * ray->dir.y;
-
-            // Convert real-world coordinates to texture coordinates
-            tex_x = (int)(ceiling_x * ceiling->img.width) % ceiling->img.width;
-            tex_y = (int)(ceiling_y * ceiling->img.height) % ceiling->img.height;
-
-            // Handle negative texture coordinates
-            if (tex_x < 0) tex_x += ceiling->img.width;
-            if (tex_y < 0) tex_y += ceiling->img.height;
-
-            // Get the color from the texture
-            s = *(__uint32_t *)(ceiling->img.addr + get_px_adr(&ceiling->img, (t_vec2){tex_x, tex_y}));
-            c = get_shadow(s, ((float)y / (float)ray->draw_end) * ray->var_shadow);
-
-            // Set the color of the pixel on the screen
-            set_color(&sh->img, get_px_adr(&sh->img, (t_vec2){x, y}), c);
-
-            if (p->flashlight == 1)
-                flashlight(sh, ray, (t_vec2){x, y}, s);
-
-            y--;
-        }
-    }
-}
-*/

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:14:55 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/28 18:56:43 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/08 20:28:43 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 /// @return a ptr of t_ml *lx static struct or NULL
 t_ml	*gmlx(int e_gmlxact)
 {
-	static t_ml	*lx;
+	static t_ml	*lx = NULL;
 
 	if (e_gmlxact == ACT_INIT && xalloc((void **)&lx, 1, sizeof(t_ml)))
 	{
@@ -27,6 +27,7 @@ t_ml	*gmlx(int e_gmlxact)
 		lx->purge_window = _ml_purge_window;
 		lx->quit_window = _ml_quit;
 		lx->new_purge_color = _ml_set_purge_color;
+		init_keyboard(lx);
 		return (lx);
 	}
 	else if (e_gmlxact == ACT_GET && lx)

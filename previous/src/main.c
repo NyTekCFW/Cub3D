@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/20 13:11:14 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/08 21:41:05 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,57 +257,61 @@ void hide_cursor(void)
 }
 */
 
-void move_forward(t_cb *cub)
+
+/*
+void move_left(t_cb *cub) 
 {
+    t_player *player = &cub->player;
+    double old_dir_x = player->dir.x;
+    player->dir.x = player->dir.x * cosf(0.1) - player->dir.y * sinf(0.1);
+    player->dir.y = old_dir_x * sinf(0.1) + player->dir.y * cosf(0.1);
+    double old_plane_x = player->plane.x;
+    player->plane.x = player->plane.x * cosf(0.1) - player->plane.y * sinf(0.1);
+    player->plane.y = old_plane_x * sinf(0.1) + player->plane.y * cosf(0.1);
+}
+void	move_forward(t_cb *cub)
+{
+	t_cb		*cub;
 	t_vec2		v;
 	t_player	*player;
+	double		speed;
 
 	player = &cub->player;
-	v = (t_vec2){(int)(player->origin.x + player->dir.x * 0.1)
-		/ cub->map_data.envdist, (int)(player->origin.y)
-		/ cub->map_data.envdist};
+	speed = getvar(VAR_G_SPEED);
+	v = (t_vec2){(int)(player->origin.x + (player->dir.x * speed)), (int)(player->origin.y)};
 	if (check_move(cub, v) && cub->map_data.map[v.y][v.x] == '0')
-		player->origin.x += player->dir.x * 0.1;
-	v = (t_vec2){(int)(player->origin.x) / cub->map_data.envdist,
-		(int)(player->origin.y + player->dir.y * 0.1)
-		/ cub->map_data.envdist};
+		player->origin.x += player->dir.x * speed;
+	v = (t_vec2){(int)(player->origin.x),
+		(int)(player->origin.y + (player->dir.y * speed))};
 	if (check_move(cub, v) && cub->map_data.map[v.y][v.x] == '0')
-		player->origin.y += player->dir.y * 0.1;
+		player->origin.y += player->dir.y * speed;
 }
 
 void	move_backward(t_cb *cub)
 {
 	t_player	*player;
+	double		speed;
 
 	player = &cub->player;
-	if (cub->map_data.map[(int)(player->origin.y / cub->map_data.envdist)][(int)(player->origin.x - player->dir.x * 0.1 / cub->map_data.envdist)] == '0')
-		player->origin.x -= player->dir.x * 0.1;
-	if (cub->map_data.map[(int)((player->origin.y - player->dir.y * 0.1) / cub->map_data.envdist)][(int)(player->origin.x)] == '0')
-		player->origin.y -= player->dir.y * 0.1;
+	speed = getvar(VAR_G_SPEED);
+	if (cub->map_data.map[(int)(player->origin.y)][(int)(player->origin.x - player->dir.x * speed)] == '0')
+		player->origin.x -= player->dir.x * speed;
+	if (cub->map_data.map[(int)((player->origin.y - player->dir.y * speed))][(int)(player->origin.x)] == '0')
+		player->origin.y -= player->dir.y * speed;
 }
 
-void move_left(t_cb *cub)
+
+void move_right(t_cb *cub)
 {
     t_player *player = &cub->player;
     double old_dir_x = player->dir.x;
-    player->dir.x = player->dir.x * cos(-0.1) - player->dir.y * sin(-0.1);
-    player->dir.y = old_dir_x * sin(-0.1) + player->dir.y * cos(-0.1);
+    player->dir.x = player->dir.x * cosf(-0.1) - player->dir.y * sinf(-0.1);
+    player->dir.y = old_dir_x * sinf(-0.1) + player->dir.y * cosf(-0.1);
     double old_plane_x = player->plane.x;
-    player->plane.x = player->plane.x * cos(-0.1) - player->plane.y * sin(-0.1);
-    player->plane.y = old_plane_x * sin(-0.1) + player->plane.y * cos(-0.1);
+    player->plane.x = player->plane.x * cosf(-0.1) - player->plane.y * sinf(-0.1);
+    player->plane.y = old_plane_x * sinf(-0.1) + player->plane.y * cosf(-0.1);
 }
-
-void move_right(t_cb *cub) 
-{
-    t_player *player = &cub->player;
-    double old_dir_x = player->dir.x;
-    player->dir.x = player->dir.x * cos(0.1) - player->dir.y * sin(0.1);
-    player->dir.y = old_dir_x * sin(0.1) + player->dir.y * cos(0.1);
-    double old_plane_x = player->plane.x;
-    player->plane.x = player->plane.x * cos(0.1) - player->plane.y * sin(0.1);
-    player->plane.y = old_plane_x * sin(0.1) + player->plane.y * cos(0.1);
-}
-
+*/
 void	debug_display_player(t_cb *data)
 {
 	printf("\n---- PLAYER\n");

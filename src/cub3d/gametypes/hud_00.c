@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:37:53 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/07 23:36:17 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/07 23:39:56 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	hud_render(void)
 	cub = g_cub(ACT_GET);
 	if (cub)
 	{
-		sh = cub->texture[TEX_RENDER];//get_img("framework");
+		sh = cub->texture[TEX_RENDER];
 		if (sh)
 		{
 			weapon_hud(cub, sh);

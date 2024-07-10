@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:32:34 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/02 02:29:25 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/09 19:14:20 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 /// @param dest destination
 /// @param src source
 /// @param n size
-/// @return 
+/// @return dest ptr
 void	*xmemcpy(void *dest, const void *src, size_t n)
 {
 	if (!dest && !src)
@@ -30,7 +30,7 @@ void	*xmemcpy(void *dest, const void *src, size_t n)
 /// @param c value that will be converted
 ///in unsigned char
 /// @param n size
-/// @return 
+/// @return s ptr
 void	*xmemset(void *s, int c, size_t n)
 {
 	__uint8_t	ux;
@@ -43,7 +43,7 @@ void	*xmemset(void *s, int c, size_t n)
 /// @brief calloc boosted with SMO method
 /// @param nmemb sizeof(value type)
 /// @param size size to alloc
-/// @return 
+/// @return memory allocated ptr
 void	*xcalloc(size_t nmemb, size_t size)
 {
 	void	*mc;
@@ -64,7 +64,7 @@ void	*xcalloc(size_t nmemb, size_t size)
 /// @param var (void **)&var
 /// @param nmemb sizeof(value type)
 /// @param ts size to alloc
-/// @return 
+/// @return 0 or 1
 int	xalloc(void **var, size_t nmemb, size_t ts)
 {
 	if (nmemb == 0 || ts == 0)

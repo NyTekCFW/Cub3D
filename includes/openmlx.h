@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:12:25 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/07 19:57:12 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/08 20:28:23 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # include "openmlx_img.h"
 # include "openmlx_vertex.h"
 # include "openmlx_video.h"
-
+# include "openmlx_keyboard.h"
 # define PI 3.14159265359
 
 typedef struct ml_s
@@ -53,9 +53,11 @@ typedef struct ml_s
 	t_texture	texture;
 	t_rec		record;
 	t_video		video;
+	t_key		key[256];
 }	t_ml;
 
 t_ml	*gmlx(int e_gmlxact);
+void	init_keyboard(t_ml *lx);
 //openmlx func
 int		_ml_create_window(char *title);
 int		_ml_set_window_size(int w, int h);

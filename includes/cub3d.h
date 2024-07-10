@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/07 23:37:27 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/08 22:52:09 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "openmlx.h"
 # include "cub3d_wpn.h"
 # include "cub3d_dvars.h"
+# include "cub3d_player.h"
 
 enum e_cub_texture
 {
@@ -82,20 +83,6 @@ typedef struct mm_s
 	int		min;
 }	t_mm;
 
-typedef struct player_s
-{
-	int			health;
-	int			score;
-	int			flashlight;
-	t_vec2f		origin;
-	t_vec2f		dir;
-	t_vec2f		plane;
-	double		vangle;
-	double		fov;
-	double		speed;
-	float		velocity;
-	t_weapon	*weapon;
-}	t_player;
 
 typedef struct map_s
 {
@@ -104,8 +91,6 @@ typedef struct map_s
 	int		height;
 	int		dimension;
 }	t_map;
-
-
 
 typedef struct cb_s
 {
@@ -116,6 +101,7 @@ typedef struct cb_s
 	t_dvars			vars[8];
 	t_weapon_data	weapons[2];
 	t_shaders		*texture[7];
+	int				stop_handler;
 }	t_cb;
 
 //cub struct
