@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 20:39:44 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/08 21:09:07 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/13 10:55:08 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,10 @@ void	keynum_replace(int num, void (*(func))())
 		lx->key[num].callback = func;
 }
 
-/// @brief Call this function to set
-/// if the keynum is pressed or not
-/// @param num obtained via get_key_num(code)
-/// @param active 1 = true 0 = false 
-void	set_keynum_status(int num, __uint8_t active)
-{
-	t_ml	*lx;
-
-	lx = gmlx(ACT_GET);
-	if (lx && num >= 0 && num < 256)
-		lx->key[num].is_pressed = active;
-}
-
 /// @brief return 1 if the keynum is pressed
 /// @param code num obtained via get_key_num(code)
 /// @return 
-int	keynum_is_pressed(int num)
+int	key_pressed(int num)
 {
 	t_ml	*lx;
 
@@ -69,11 +56,27 @@ int	keynum_execute(int num)
 	lx = gmlx(ACT_GET);
 	if (lx && num >= 0 && num < 256)
 	{
-		if (keynum_is_pressed(num) && lx->key[num].callback != NULL)
+		if (!lx->key[num].ignore && lx->key[num].is_pressed
+			&& lx->key[num].callback != NULL)
 		{
 			lx->key[num].callback();
 			return (1);
 		}
 	}
 	return (0);
+}
+
+t_key	*get_key(__uint8_t id)
+{
+	int		n;
+	t_ml	*lx;
+
+	lx = gmlx(ACT_GET);
+	if (lx && id < BUTTON_MAX)
+	{
+		n = get_key_num(lx->config.button[id]);
+		if (n >= 0 && n < 256)
+			return (&lx->key[n]);
+	}
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:37:53 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/07 23:39:56 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:23:19 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,10 @@ static void	weapon_hud(t_cb *cub, t_shaders *sh)
 	t_area	*ar;
 
 	ar = &cub->screen.area;
-	merge_img(sh, get_img("/dpad_bar.xpm"), (t_vec2){ar->a3.x - 306, ar->a3.y - 116});
-	merge_img(sh, get_img("/dpad.xpm"), (t_vec2){ar->a3.x - 110, ar->a3.y - 205});
-
+	merge_img(sh, get_img("/dpad_bar.xpm"),
+		(t_vec2){ar->a3.x - 306, ar->a3.y - 116});
+	merge_img(sh, get_img("/dpad.xpm"),
+		(t_vec2){ar->a3.x - 110, ar->a3.y - 205});
 	get_weapon_info();
 	typewritter(cub->player.weapon->info_buffer,
 		(t_vec2){ar->a3.x - 200, ar->a3.y - 168});

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:37:53 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/08 22:13:37 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:18:45 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ typedef struct player_s
 	t_weapon	*weapon;
 }	t_player;
 
+void	player_settings(t_cb *cub);
 void	p_reg_commands(void);
 void	pmove_forward(void);
 void	pmove_backward(void);
 void	plook_right(void);
 void	plook_left(void);
-void	pflash_light(void);
-void	psprint(void);
+int		check_move(t_cb *cub, t_vec2 v);
 #endif

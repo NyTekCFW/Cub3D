@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 11:03:57 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/07 22:52:15 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:29:35 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ static void	init_ray(t_ray *ray, t_cb *cub, int x)
 	ray_dda_step(ray, player);
 	ray_dda_hit(ray, cub);
 	ray_line(ray, cub);
-	ray_get_color(ray);
 	if (ray->draw_end >= 0 && ray->draw_end < 720)
 	{
 		draw_ceiling(x, ray, player);

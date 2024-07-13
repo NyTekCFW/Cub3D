@@ -6,13 +6,44 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/08 22:51:01 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:28:19 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
+t_vec2	get_anim_hand_pos(t_cb *cub, t_screen * screen)
+{
+	double	g;
+	float	x;
+	t_vec2	p;
+	t_vec2	*r;
 
+	r = get_move_render();
+	p = (t_vec2){screen->x + 300, screen->y - 35};
+	g = getvar(VAR_G_SPEED);
+	x = 1.0;
+	if (g >= 0.15)
+		x = 1.5;
+	p.x += ((r->x * x) * cub->player.velocity) * getvar(VAR_GUN_X);
+	p.y += ((r->y * x) * cub->player.velocity) * getvar(VAR_GUN_Y);
+	return (p);
+}
+
+void	execute_keyboard(void)
+{
+	int		i;
+	t_key	*key;
+
+	i = -1;
+	while (++i < *get_key_count())
+		keynum_execute(i);
+	key = get_key(BUTTON_SPRINT);
+	if (key->is_pressed)
+		setdvar(VAR_G_SPEED, 0.15);
+	else
+		setdvar(VAR_G_SPEED, 0.1);
+}
 
 void	load_game_textures(t_cb *cub, __uint32_t cg, __uint32_t cc)
 {
@@ -63,15 +94,12 @@ clock_t	timer = 0;
 
 int	display(t_ml *lx)
 {
-	int w;
-	int s;
+	t_key		*key[2];
 	t_cb		*cub;
 	t_screen	*screen;
 	char		buffer[32];
 
 	cub = g_cub(ACT_GET);
-	if (cub->stop_handler == 2)
-		return (0);
 	if (cub && lx && lx->refresh)
 	{
 		while (clock() < timer)
@@ -82,7 +110,7 @@ int	display(t_ml *lx)
 		screen = &cub->screen;
 		raycast_env();
 		run_weapon_anim();
-		merge_img(get_img("framework"), get_img(g_cub(ACT_GET)->player.weapon->anim_buffer), (t_vec2){(screen->x + 300 + (get_move_render()->x * cub->player.velocity)) * getvar(VAR_GUN_X),((screen->y - 35) + (get_move_render()->y * cub->player.velocity)) * getvar(VAR_GUN_Y)});
+		merge_img(get_img("framework"), get_img(g_cub(ACT_GET)->player.weapon->anim_buffer), get_anim_hand_pos(cub, screen));
 		
 		
 		hud_render();
@@ -108,21 +136,20 @@ int	display(t_ml *lx)
 		});
 		print_img((t_vec2){screen->x, screen->y}, "framework");
 		timer = clock() + getvarint(VAR_FPS);
-		w = get_key_num(XK_w);
-		s = get_key_num(XK_s);
-		if (!keynum_is_pressed(w) && !keynum_is_pressed(s))
+		key[0] = get_key(BUTTON_MOVE_FORWARD);
+		key[1] = get_key(BUTTON_MOVE_BACKWARD);
+		if (key[0] && key[1])
 		{
-			cub->player.velocity -= 0.2;
+			if (!key_pressed(key[0]->id) && !key_pressed(key[0]->id))
+			{
+				cub->player.velocity -= 0.2;
 			if (cub->player.velocity < 0)
 				cub->player.velocity = 0;
+			}
 		}
-		w = get_key_num(XK_Shift_L);
-		if (!keynum_is_pressed(w))
-			setdvar(VAR_G_SPEED, 0.1);
+		execute_keyboard();
 		//export_img("framework");
 	}
-	if (cub->stop_handler == 1)
-		cub->stop_handler++;
 	return (1);
 }
 
@@ -184,11 +211,11 @@ int	mouse_move(int x, int y, t_cb *cub)
 			d[2] = player->dir.x;
 			d[3] = player->plane.x;
 			player->dir.x
-				= player->dir.x * cos(-d[1]) - player->dir.y * sin(-d[1]);
-			player->dir.y = d[2] * sin(-d[1]) + player->dir.y * cos(-d[1]);
+				= player->dir.x * cosf(-d[1]) - player->dir.y * sinf(-d[1]);
+			player->dir.y = d[2] * sinf(-d[1]) + player->dir.y * cosf(-d[1]);
 			player->plane.x
-				= player->plane.x * cos(-d[1]) - player->plane.y * sin(-d[1]);
-			player->plane.y = d[3] * sin(-d[1]) + player->plane.y * cos(-d[1]);
+				= player->plane.x * cosf(-d[1]) - player->plane.y * sinf(-d[1]);
+			player->plane.y = d[3] * sinf(-d[1]) + player->plane.y * cosf(-d[1]);
 			player->vangle -= delta.y * d[0];
 			if (player->vangle > 0.8)
 				player->vangle = 0.8;
@@ -243,7 +270,7 @@ void	register_xpm(void)
 		register_img("./textures/weapon/M1911_idle_walk.xpm");
 		i = split_image("/M1911_idle_walk.xpm", "M1911_walk_", 640, 0);
 		cub->weapons[WPN_M1911].frame[WPN_FRAME_WALK] = i - 1;
-		load_game_textures(cub, 0x00FFFF, 0xFF0000);
+		load_game_textures(cub, 0x00FF00, 0xFF0000);
 	}
 }
 
@@ -263,7 +290,8 @@ int	main(void)
 			if (cub)
 			{
 				lx->refresh = 1;
-				register_xpm();			
+				register_xpm();
+				mlx_do_key_autorepeatoff(lx->ptr);		
 				mlx_mouse_move(lx->ptr, lx->win, lx->width / 2, lx->height / 2);
 				mlx_mouse_hide(lx->ptr, lx->win);
 				mlx_hook(lx->win, KeyPress, (1L << 0), hook_keyboard_p, lx);

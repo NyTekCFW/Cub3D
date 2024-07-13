@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 11:21:23 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/08 22:19:12 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:59:52 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	flashlight_move(t_vec2 *u)
 		t.y *= -1;
 }
 
-static void	flashlight(t_shaders *sh, t_ray *ray, t_vec2 v, __uint32_t c)
+void	flashlight(t_shaders *sh, t_ray *ray, t_vec2 v, __uint32_t c)
 {
 	double	xdist;
 	t_vec2f	center;
@@ -72,74 +72,37 @@ void	draw_ceiling(int x, t_ray *ray, t_player *p)
 	}
 }
 
-void draw_floor(int x, t_ray *ray, t_player *p)
+void	_draw_floor(t_ray *ray, t_vec2 u, t_shaders	*sh[], t_player *p)
 {
-    t_shaders *sh;
-    t_shaders *floor;
-    int y;
-    __uint32_t c;
-    __uint32_t s;
-    double floor_x, floor_y;
-    double row_distance;
-    int tex_x, tex_y;
+	__uint32_t	c[2];
+	t_vec2f		floor;
+	t_vec2		tex;
+	double		row;
 
-    sh = ray->texture[TEX_RENDER];
-    floor = ray->texture[TEX_GROUND];
-
-    if (sh && floor)
-    {
-        y = sh->img.height - 1;
-        while (y >= ray->draw_end)
-        {
-			row_distance = 720.0 / (2.0 * y - 720.0 - 2.0 * ray->v_offset);
-            floor_x = p->origin.x + row_distance * ray->dir.x;
-            floor_y = p->origin.y + row_distance * ray->dir.y;
-            tex_x = (int)(floor_x * floor->img.width) % floor->img.width;
-            tex_y = (int)(floor_y * floor->img.height) % floor->img.height;
-            s = *(__uint32_t *)(floor->img.addr + get_px_adr(&floor->img, (t_vec2){tex_x, tex_y}));
-            c = get_shadow(s, (1 - ((float)y / (float)sh->img.height)) * ray->var_shadow);
-            set_color(&sh->img, get_px_adr(&sh->img, (t_vec2){x, y}), c);
-			if (p->flashlight == 1)
-				flashlight(sh, ray, (t_vec2){x, y}, s);
-			y--;
-        }
-    }
+	row = 720.0 / (2.0 * u.y - 720.0 - 2.0 * ray->v_offset);
+	floor.x = p->origin.x + row * ray->dir.x;
+	floor.y = p->origin.y + row * ray->dir.y;
+	tex.x = (int)(floor.x * sh[1]->img.width) % sh[1]->img.width;
+	tex.y = (int)(floor.y * sh[1]->img.height) % sh[1]->img.height;
+	c[0] = *(__uint32_t *)(sh[1]->img.addr + get_px_adr(&sh[1]->img, tex));
+	c[1] = get_shadow(c[0], (1 - ((float)u.y / (float)sh[0]->img.height))
+			* ray->var_shadow);
+	set_color(&sh[0]->img, get_px_adr(&sh[0]->img, u), c[1]);
+	if (p->flashlight == 1)
+		flashlight(sh[0], ray, u, c[0]);
 }
 
-void draw_walls(int x, t_ray *ray, t_player *p)
+void	draw_floor(int x, t_ray *ray, t_player *p)
 {
-    t_shaders *sh;
-    t_shaders *wl;
-    int y;
-    __uint32_t c;
-    __uint32_t s;
-    int tex_x;
-    int tex_y;
-    float step;
-    float tex_pos;
+	t_shaders	*sh[2];
+	int			y;
 
-    sh = ray->texture[TEX_RENDER];
-    wl = get_walls_texture(ray);
-    if (sh && wl)
-    {
-        tex_x = (int)(ray->wall_x * (float)(wl->img.width));
-        if (ray->side == 0 && ray->dir.x > 0)
-            tex_x = wl->img.width - tex_x - 1;
-        if (ray->side == 1 && ray->dir.y < 0)
-            tex_x = wl->img.width - tex_x - 1;
-        step = 1.0 * wl->img.height / ray->line_height;
-		tex_pos = (ray->draw_start - (360 + (int)ray->v_offset) + ray->line_height / 2) * step;
-	    y = ray->draw_start;
-        while (y < ray->draw_end)
-        {
-            tex_y = (int)tex_pos & (wl->img.height - 1);
-            tex_pos += step;
-            s = *(__uint32_t *)(wl->img.addr + get_px_adr(&wl->img, (t_vec2){tex_x, tex_y}));
-           c = get_shadow(s, (ray->pwall_dist / 15) * ray->var_shadow);
-            set_color(&sh->img, get_px_adr(&sh->img, (t_vec2){x, y}), c);
-            if (p->flashlight == 1)
-				flashlight(sh, ray, (t_vec2){x, y}, s);
-			y += 1;
-        }
-    }
+	sh[0] = ray->texture[TEX_RENDER];
+	sh[1] = ray->texture[TEX_GROUND];
+	if (sh[0] && sh[1])
+	{
+		y = sh[0]->img.height;
+		while (--y >= ray->draw_end)
+			_draw_floor(ray, (t_vec2){x, y}, sh, p);
+	}
 }

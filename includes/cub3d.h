@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/08 22:52:09 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/13 12:00:07 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,10 @@
 # define CUB3D_H
 
 # include "openmlx.h"
+# include "cub3d_enum.h"
 # include "cub3d_wpn.h"
 # include "cub3d_dvars.h"
 # include "cub3d_player.h"
-
-enum e_cub_texture
-{
-	TEX_WALL_SOUTH	= 0,
-	TEX_WALL_NORTH,
-	TEX_WALL_EAST,
-	TEX_WALL_WEST,
-	TEX_GROUND,
-	TEX_CEILING,
-	TEX_RENDER
-};
 
 typedef struct area_s
 {
@@ -83,7 +73,6 @@ typedef struct mm_s
 	int		min;
 }	t_mm;
 
-
 typedef struct map_s
 {
 	char	**map;
@@ -106,7 +95,6 @@ typedef struct cb_s
 
 //cub struct
 t_cb		*g_cub(int act);
-void		init_dvars(t_cb *cub);
 void		initial_weapons_data(t_cb *cub);
 void		initial_center_screen(t_cb *cub);
 //screen
@@ -114,19 +102,16 @@ void		draw_safe_area(void);
 void		safe_area_update(t_screen *sc);
 //raycasting
 void		raycast_env(void);
-void		ray_get_color(t_ray *ray);
 void		draw_ceiling(int x, t_ray *ray, t_player *p);
 void		draw_floor(int x, t_ray *ray, t_player *p);
 void		draw_walls(int x, t_ray *ray, t_player *p);
-t_shaders	*get_walls_texture(t_ray *ray);
 void		flashlight_move(t_vec2 *u);
+void		flashlight(t_shaders *sh, t_ray *ray, t_vec2 v, __uint32_t c);
 __uint32_t	get_shadow(__uint32_t c, float dist);
 //map
 void		map_init(t_cb *cub);
 //
-int			check_move(t_cb *cub, t_vec2 v);
-void		player_settings(t_cb *cub);
-//
 void		hud_render(void);
 void		crosshair_hud(t_cb *cub, t_shaders *sh);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:34:11 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/08 22:50:06 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/13 11:15:28 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 static void	_g_exit(void)
 {
 	int	i;
+	int	n;
+	int	*p;
 
-	i = 0;
-	while (i < 256)
-	{
+	i = -1;
+	p = get_key_count();
+	n = *p;
+	*p = 0;
+	while (++i < n)
 		keynum_replace(i, NULL);
-		i++;
-	}
 }
 
 t_cb	*g_cub(int act)
@@ -52,7 +54,7 @@ void	g_exit(void)
 	if (cub)
 	{
 		cub->stop_handler = 1;
-		while (cub->stop_handler < 5)
+		while (cub->stop_handler < 2)
 			continue ;
 		_g_exit();
 	}

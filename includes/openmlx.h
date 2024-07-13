@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:12:25 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/08 20:28:23 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/13 09:12:54 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ typedef struct ml_s
 	int			refresh;
 	__uint32_t	purge_color;
 	t_texture	texture;
-	t_rec		record;
+	t_config	config;
 	t_video		video;
+	t_rec		record;
 	t_key		key[256];
 }	t_ml;
 
