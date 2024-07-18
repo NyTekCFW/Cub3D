@@ -1,0 +1,14 @@
+          NO 	./textures/walls/brick_red.xpm			
+SO ./textures/walls/brick_white.xpm
+WE ./textures/walls/cinderblock.xpm
+EA ./textures/walls/roof_brick.xpm
+
+F	220	  	,	    100,	 0	 
+C	225	 	 ,	  		30,	 0888888
+
+11111111
+10010001
+10110001
+10000001
+10000N01
+11111111
