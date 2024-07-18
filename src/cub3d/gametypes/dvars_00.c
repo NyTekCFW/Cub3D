@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 18:47:09 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/25 19:18:09 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/17 10:19:08 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ static void	fix_value(double *v, t_vec2f *m)
 t_dvars	reg_var(int id, double dval, t_vec2f m)
 {
 	t_dvars	var;
-
 	fix_value(&dval, &m);
 	var.id = id;
 	var.dvalue = dval;

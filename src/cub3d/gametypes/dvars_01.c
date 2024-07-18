@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 20:06:16 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/03 01:07:48 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/17 10:00:44 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,9 @@ void	init_dvars(t_cb *cub)
 		cub->vars[VAR_GUN_Y]
 			= reg_var(VAR_GUN_Y, 1.3, (t_vec2f){0.88f, 1.60f});
 		cub->vars[VAR_FPS]
-			= reg_var(VAR_FPS, 16666.0, (t_vec2f){33333.0f, 15384.0f});
+			= reg_var(VAR_FPS, 60.0, (t_vec2f){144.0f, 30.0f});
+		cub->vars[VAR_TIMESCALE]
+			= reg_var(VAR_TIMESCALE, 1.0f, (t_vec2f){2.0f, 0.01f});
 		cub->vars[VAR_ASPECT]
 			= reg_var(VAR_ASPECT, 1.13f, (t_vec2f){0.60f, 1.85f});
 	}

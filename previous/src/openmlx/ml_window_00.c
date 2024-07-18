@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 16:40:39 by lchiva            #+#    #+#             */
-/*   Updated: 2024/06/04 20:02:11 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/17 11:52:47 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	_ml_quit(void)
 	lx = gmlx(ACT_GET);
 	if (lx)
 	{
+		lx->debug = 1;
 		purge_textures();
 		if (lx->ptr && lx->win)
 		{

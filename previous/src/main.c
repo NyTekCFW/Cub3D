@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/08 21:41:05 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/17 07:44:29 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ int	display(t_ml *lx)
 		run_weapon_anim();
 		//buffer_img(get_img("framework"), get_img("icon_minimap"), (t_vec2){0, 0});
 		buffer_img(get_img("framework"), get_img(g_cub(ACT_GET)->player.weapon->anim_buffer), (t_vec2){lx->width - 640, lx->height - 600});
-		typewritter("\nHold F to\n open [Cost: 4000$]", (t_vec2){0, 300});
+	//	typewritter("framework", "\nHold F to\n open [Cost: 4000$]", (t_vec2){0, 300});
 		//draw_hand(lx);
 		print_img((t_vec2){0, 0}, "framework");
 		//draw_cone();

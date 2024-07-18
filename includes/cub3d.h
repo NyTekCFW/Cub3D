@@ -6,18 +6,19 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:24:21 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/13 12:00:07 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/17 12:28:53 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "openmlx.h"
+# include "../openmlx/includes/openmlx.h"
 # include "cub3d_enum.h"
 # include "cub3d_wpn.h"
 # include "cub3d_dvars.h"
 # include "cub3d_player.h"
+# include "cub3d_shortcuts.h"
 
 typedef struct area_s
 {
@@ -87,7 +88,7 @@ typedef struct cb_s
 	t_mm			minimap;
 	t_map			map_data;
 	t_player		player;
-	t_dvars			vars[8];
+	t_dvars			vars[9];
 	t_weapon_data	weapons[2];
 	t_shaders		*texture[7];
 	int				stop_handler;
@@ -112,6 +113,5 @@ __uint32_t	get_shadow(__uint32_t c, float dist);
 void		map_init(t_cb *cub);
 //
 void		hud_render(void);
-void		crosshair_hud(t_cb *cub, t_shaders *sh);
 
 #endif

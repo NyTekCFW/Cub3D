@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 11:05:05 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/13 11:28:19 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/17 12:26:08 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	load_game_textures(t_cb *cub, __uint32_t cg, __uint32_t cc)
 
 clock_t	timer = 0;
 
-int	display(t_ml *lx)
+int	displayx(t_ml *lx)
 {
 	t_key		*key[2];
 	t_cb		*cub;
@@ -102,11 +102,8 @@ int	display(t_ml *lx)
 	cub = g_cub(ACT_GET);
 	if (cub && lx && lx->refresh)
 	{
-		while (clock() < timer)
-			;
 		xmemset(buffer, 0, sizeof(buffer));
 		xstrcpy(buffer, "FPS : ");
-		clock_t dd = clock();
 		screen = &cub->screen;
 		raycast_env();
 		run_weapon_anim();
@@ -120,21 +117,15 @@ int	display(t_ml *lx)
 			save_record();
 		if (lx->video.status)
 			display_video((t_vec2){screen->x, screen->y});
-	//	load_video("./export/video.bin\0");
-		int tmp = 1000000 / (clock() - dd);
-		if (tmp >= 1000)
-			buffer[xstrlen(buffer)] = 0x30 + (tmp / 1000);
-		if (tmp >= 100)
-			buffer[xstrlen(buffer)] = 0x30 + ((tmp / 100) % 10);
-		if (tmp >= 10)
-			buffer[xstrlen(buffer)] = 0x30 + ((tmp / 10) % 10);
-		buffer[xstrlen(buffer)] = 0x30 + (tmp % 10);
-		typewritter(buffer, (t_vec2)
+	//	load_video("../export/video.bin\0");
+		typewritter("framework", buffer, (t_vec2)
 		{
 			cub->screen.area.a1.x,
 			cub->screen.area.a1.y + 300
 		});
+		//overlay_images(&get_img("framework")->img, &get_img("framework")->img, &get_img("record_logo")->img, 0.8);
 		print_img((t_vec2){screen->x, screen->y}, "framework");
+		print_img((t_vec2){screen->x + 5, screen->y + 5}, "/record_logo.bin");
 		timer = clock() + getvarint(VAR_FPS);
 		key[0] = get_key(BUTTON_MOVE_FORWARD);
 		key[1] = get_key(BUTTON_MOVE_BACKWARD);
@@ -150,9 +141,37 @@ int	display(t_ml *lx)
 		execute_keyboard();
 		//export_img("framework");
 	}
-	return (1);
+	return 1;
 }
 
+int	display(t_ml *lx)
+{
+	char	buffer[64];
+	//char	*res;
+	clock_t	fm[2];
+	double	p[3];
+
+	fm[0] = clock();
+	(void)lx;
+	//displayx(lx);
+	
+	p[0] = (double)((clock() - fm[0]) / CLOCKS_PER_SEC);
+	p[1] = 1.0 / getvar(VAR_FPS);
+	p[2] = (p[1] - p[0]) / getvar(VAR_TIMESCALE);
+	while ((double)((clock() - fm[0]) / CLOCKS_PER_SEC) < p[2])
+		continue ;
+	fm[1] = (clock() - fm[0]) / CLOCKS_PER_SEC;
+	xmemset(buffer, 0, 64);
+	xstrcpy(buffer, "FPS: ");
+	/*res = xitoa(fm[1]);
+	if (res)
+	{
+		xstrcpy(buffer + xstrlen(buffer), res);
+		xwrite(1, buffer, xstrlen(buffer));
+		xfree((void **)&res);
+	}*/
+	return (0);
+}
 
 int hook_keyboard(int keycode, t_ml *lx)
 {
@@ -241,6 +260,7 @@ void	register_xpm(void)
 	lx = gmlx(ACT_GET);
 	if (lx && cub)
 	{
+		register_exp_img("./textures/export/record_logo.bin");
 		register_exp_img("./export/framework.bin");
 		//basic
 		register_img("./textures/huds/dpad.xpm");
@@ -270,7 +290,7 @@ void	register_xpm(void)
 		register_img("./textures/weapon/M1911_idle_walk.xpm");
 		i = split_image("/M1911_idle_walk.xpm", "M1911_walk_", 640, 0);
 		cub->weapons[WPN_M1911].frame[WPN_FRAME_WALK] = i - 1;
-		load_game_textures(cub, 0x00FF00, 0xFF0000);
+		load_game_textures(cub, 0, 0xFF0000);
 	}
 }
 
@@ -296,9 +316,10 @@ int	main(void)
 				mlx_mouse_hide(lx->ptr, lx->win);
 				mlx_hook(lx->win, KeyPress, (1L << 0), hook_keyboard_p, lx);
 				mlx_hook(lx->win, KeyRelease, (1L << 1), hook_keyboard_r, lx);
-			//	mlx_hook(lx->win, KeyPress, (1L << 0), hook_keyboard, lx);
 				mlx_hook(lx->win, MotionNotify, PointerMotionMask, mouse_move, cub);
-				mlx_loop_hook(lx->ptr, display, lx);
+				mlx_hook(lx->win, ButtonPress, (1L << 2), hook_mouse_p, NULL);
+				mlx_hook(lx->win, ButtonRelease, (1L << 3), hook_mouse_r, NULL);
+				mlx_loop_hook(lx->ptr, displayx, lx);
 				mlx_loop(lx->ptr);
 			}
 			lx->quit_window();

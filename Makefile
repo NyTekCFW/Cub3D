@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lchiva <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/07/17 12:23:58 by lchiva            #+#    #+#              #
+#    Updated: 2024/07/17 12:23:58 by lchiva           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 # Styles de texte
 COLOR_RESET = \033[0m
 COLOR_BOLD = \033[1m
@@ -36,7 +48,7 @@ COLOR_REVERSE_BRIGHT = \033[7;7m
 COLOR_HIDDEN_BRIGHT = \033[8;8m
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -O3 -march=native
+CFLAGS = -Wall -Wextra -Werror -g -O3
 RM = rm -rf
 NAME = cub3d
 OBJ_DIR = obj
@@ -45,10 +57,16 @@ MLX_DIR = ./minilibx-linux/
 LIBFLAGS = -lX11 -lXext
 MLX = $(MLX_DIR)libmlx_Linux.a
 
-SRCS := $(shell find $(SRC_DIR) -name '*.c')
+# Directories for openmlx
+OPENMLX_SRC_DIR = ./openmlx/src
+OPENMLX_INC_DIR = ./openmlx/includes
 
-vpath %.c $(SRC_DIR) $(shell find $(SRC_DIR) -type d)
+SRCS := $(shell find $(SRC_DIR) -name '*.c') $(shell find $(OPENMLX_SRC_DIR) -name '*.c')
+INCLUDES = -I./includes -I$(OPENMLX_INC_DIR)
+
+vpath %.c $(SRC_DIR) $(OPENMLX_SRC_DIR) $(shell find $(SRC_DIR) -type d) $(shell find $(OPENMLX_SRC_DIR) -type d)
 OBJS = $(patsubst %.c, $(OBJ_DIR)/%.o, $(notdir $(SRCS)))
+
 all: init_header $(MLX) $(OBJ_DIR) $(NAME)
 
 $(NAME): $(OBJS)

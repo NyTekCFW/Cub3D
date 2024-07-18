@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:34:11 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/13 11:15:28 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/17 06:57:15 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,15 @@ t_cb	*g_cub(int act)
 
 void	g_exit(void)
 {
+	t_ml	*lx;
 	t_cb	*cub;
 
+	lx = gmlx(ACT_GET);
 	cub = g_cub(ACT_GET);
-	if (cub)
+	if (cub && lx)
 	{
 		cub->stop_handler = 1;
+		mlx_loop_end(lx->ptr);
 		while (cub->stop_handler < 2)
 			continue ;
 		_g_exit();

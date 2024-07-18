@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:37:53 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/13 11:18:45 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/15 12:00:50 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,8 @@ void	pmove_forward(void);
 void	pmove_backward(void);
 void	plook_right(void);
 void	plook_left(void);
+void	plook_up(void);
+void	plook_down(void);
+void	pswitchweapon(void);
 int		check_move(t_cb *cub, t_vec2 v);
 #endif

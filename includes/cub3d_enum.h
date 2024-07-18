@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 08:02:00 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/13 10:44:25 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/17 08:52:21 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ enum e_dvars_type
 	VAR_GUN_X,
 	VAR_GUN_Y,
 	VAR_FPS,
+	VAR_TIMESCALE,
 	VAR_ASPECT,
 	VAR_MAX
 };

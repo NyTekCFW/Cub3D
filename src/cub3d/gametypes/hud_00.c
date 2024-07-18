@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:37:53 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/13 11:23:19 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/17 07:44:59 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	score_hud(t_cb *cub, t_shaders *sh)
 	{
 		ar = &cub->screen.area;
 		merge_img(sh, fr, (t_vec2){ar->a1.x, ar->a4.y - 194});
-		typewritter("$500999", (t_vec2){ar->a1.x + 2, ar->a4.y - 192});
+		typewritter("framework", "$500999", (t_vec2){ar->a1.x + 2, ar->a4.y - 192});
 	}
 }
 
@@ -64,8 +64,29 @@ static void	weapon_hud(t_cb *cub, t_shaders *sh)
 	merge_img(sh, get_img("/dpad.xpm"),
 		(t_vec2){ar->a3.x - 110, ar->a3.y - 205});
 	get_weapon_info();
-	typewritter(cub->player.weapon->info_buffer,
+	typewritter("framework", cub->player.weapon->info_buffer,
 		(t_vec2){ar->a3.x - 200, ar->a3.y - 168});
+}
+
+static void	crosshair_hud(t_cb *cub, t_shaders *sh)
+{
+	t_shaders	*cv;
+	t_shaders	*ch;
+	int			v;
+
+	if (cub)
+	{
+		cv = get_img("/crosshair_v.xpm");
+		ch = get_img("/crosshair_h.xpm");
+		v = (cub->player.velocity * 8);
+		if (ch && cv && sh)
+		{
+			merge_img(sh, cv, (t_vec2){638, 347 - v});
+			merge_img(sh, cv, (t_vec2){638, 363 + v});
+			merge_img(sh, ch, (t_vec2){627 - v, 358});
+			merge_img(sh, ch, (t_vec2){643 + v, 358});
+		}
+	}
 }
 
 void	hud_render(void)

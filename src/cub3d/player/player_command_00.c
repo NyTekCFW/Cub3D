@@ -6,7 +6,7 @@
 /*   By: lchiva <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:12:18 by lchiva            #+#    #+#             */
-/*   Updated: 2024/07/08 21:59:28 by lchiva           ###   ########.fr       */
+/*   Updated: 2024/07/14 01:14:21 by lchiva           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void	pmove_forward(void)
 	t_vec2		v;
 
 	cub = g_cub(ACT_GET);
-	if (cub)
+	p = get_user();
+	if (cub && p)
 	{
-		p = &cub->player;
 		p->speed = getvar(VAR_G_SPEED);
 		v = (t_vec2){(int)(p->origin.x + (p->dir.x * p->speed)),
 			(int)(p->origin.y)};
@@ -59,9 +59,9 @@ void	pmove_backward(void)
 	t_vec2		v;
 
 	cub = g_cub(ACT_GET);
-	if (cub)
+	p = get_user();
+	if (cub && p)
 	{
-		p = &cub->player;
 		p->speed = getvar(VAR_G_SPEED);
 		v = (t_vec2){(int)(p->origin.x - (p->dir.x * p->speed)),
 			(int)(p->origin.y)};
@@ -76,15 +76,13 @@ void	pmove_backward(void)
 
 void	plook_right(void)
 {
-	t_cb		*cub;
 	t_player	*p;
 	double		odir;
 	double		oplane;
 
-	cub = g_cub(ACT_GET);
-	if (cub)
+	p = get_user();
+	if (p)
 	{
-		p = &cub->player;
 		odir = p->dir.x;
 		p->dir.x = p->dir.x * cosf(-0.1) - p->dir.y * sinf(-0.1);
 		p->dir.y = odir * sinf(-0.1) + p->dir.y * cosf(-0.1);
@@ -96,15 +94,13 @@ void	plook_right(void)
 
 void	plook_left(void)
 {
-	t_cb		*cub;
 	t_player	*p;
 	double		odir;
 	double		oplane;
 
-	cub = g_cub(ACT_GET);
-	if (cub)
+	p = get_user();
+	if (p)
 	{
-		p = &cub->player;
 		odir = p->dir.x;
 		p->dir.x = p->dir.x * cosf(0.1) - p->dir.y * sinf(0.1);
 		p->dir.y = odir * sinf(0.1) + p->dir.y * cosf(0.1);
